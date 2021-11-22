@@ -16,7 +16,7 @@ namespace RpgInterpreterTests.LexerTests
         private readonly DiceOrNaturalLexer _lexer = new ();
 
         [TestCaseSource(nameof(_dice))]
-        public void UppercaseWordTest(SingleTestData data)
+        public void DiceTest(SingleTestData data)
         {
             var result = _lexer.Match(data.Source);
 
