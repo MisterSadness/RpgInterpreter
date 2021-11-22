@@ -20,7 +20,7 @@ namespace RpgInterpreter.Lexer
             while (c.HasValue)
             {
                 var possible = _inner.SingleOrDefault(i => i.FirstCharacterMatches(c.Value))
-                    ?? throw new UnexpectedEndOfInputException();
+                    ?? throw new UnexpectedInputException();
                 yield return possible.Match(source);
                 c = source.Peek();
             }
