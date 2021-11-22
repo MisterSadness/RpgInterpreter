@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using RpgInterpreter.Lexer.InnerLexers;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
@@ -20,7 +19,7 @@ namespace RpgInterpreter.Lexer
             while (c.HasValue)
             {
                 var possible = _inner.SingleOrDefault(i => i.FirstCharacterMatches(c.Value))
-                    ?? throw new UnexpectedInputException();
+                               ?? throw new UnexpectedInputException();
                 yield return possible.Match(source);
                 c = source.Peek();
             }

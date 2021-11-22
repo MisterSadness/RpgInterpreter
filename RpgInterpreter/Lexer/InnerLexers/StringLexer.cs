@@ -29,7 +29,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
                     sb.Append(c);
                 }
                 else if (c is '"')
-                {  
+                {
                     break;
                 }
                 else if (IsInnerString(c.Value))
@@ -40,6 +40,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
                 {
                     throw new InvalidCharacterException();
                 }
+
                 c = source.Pop();
             }
 
@@ -47,18 +48,21 @@ namespace RpgInterpreter.Lexer.InnerLexers
             {
                 throw new MissingClosingQuoteException();
             }
-            
+
             return new StringLiteral(sb.ToString());
 
             bool IsInnerString(char x) => char.IsLetterOrDigit(x) || char.IsPunctuation(x) || x is ' ' or '\t';
 
-            char MatchEscaped() => source.Pop() switch
+            char MatchEscaped()
             {
-                'n' => '\n',
-                '"' => '"',
-                '\\' => '\\',
-                _ => throw new UndefinedEscapeSequenceException()
-            };
+                return source.Pop() switch
+                {
+                    'n' => '\n',
+                    '"' => '"',
+                    '\\' => '\\',
+                    _ => throw new UndefinedEscapeSequenceException()
+                };
+            }
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-
-namespace RpgInterpreter.Lexer.LexingErrors
+﻿namespace RpgInterpreter.Lexer.LexingErrors
 {
-    public class MissingOpeningQuoteException : LexingException
-    {
-
-    }
+    public class MissingOpeningQuoteException : LexingException { }
 }

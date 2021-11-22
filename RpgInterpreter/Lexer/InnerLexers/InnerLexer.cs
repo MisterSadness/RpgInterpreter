@@ -20,6 +20,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
                 sb.Append(c);
                 c = source.Peek();
             }
+
             return sb.ToString();
         }
     }

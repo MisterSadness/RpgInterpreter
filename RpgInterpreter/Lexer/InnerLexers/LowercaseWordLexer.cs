@@ -6,6 +6,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
     public class LowercaseWordLexer : InnerLexer
     {
         public override bool FirstCharacterMatches(char c) => char.IsLower(c);
+
         public override Token Match(ICharSource source)
         {
             var wholeString = MatchAll(source, IdentifierUtils.IsInnerIdentifier);

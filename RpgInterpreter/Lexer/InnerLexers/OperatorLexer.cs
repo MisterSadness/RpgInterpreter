@@ -8,6 +8,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
     public class OperatorLexer : InnerLexer
     {
         public override bool FirstCharacterMatches(char c) => "-+*/=!<>|&.".Contains(c);
+
         public override Token Match(ICharSource source)
         {
             var previous = source.Pop() ?? throw new UnexpectedEndOfInputException();

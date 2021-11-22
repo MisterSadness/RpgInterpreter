@@ -16,10 +16,7 @@ if (args.Length == 1 && File.Exists(args[0]))
         var tokens = lexer.Tokenize(source).ToArray();
         Console.WriteLine($"Successfully parsed, result token total: {tokens.Length}");
         Console.WriteLine("Result tokens (without whitespace):");
-        foreach (var token in tokens.Where(t => t is not Whitespace))
-        {
-            Console.WriteLine(token);
-        }
+        foreach (var token in tokens.Where(t => t is not Whitespace)) Console.WriteLine(token);
     }
     catch (LexingException e)
     {

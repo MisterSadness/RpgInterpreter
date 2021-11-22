@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RpgInterpreter.Lexer.Sources
+﻿namespace RpgInterpreter.Lexer.Sources
 {
-    class TrackingCharSource : ICharSource
+    internal class TrackingCharSource : ICharSource
     {
         private readonly ICharSource _inner;
-
-        public TrackingCharSource(ICharSource inner)
-        {
-            _inner = inner;
-        }
-        
-        private int _line;
         private int _column;
+
+        private int _line;
+
+        public TrackingCharSource(ICharSource inner) => _inner = inner;
 
         public Position Position => new(_line, _column);
 
@@ -35,7 +26,7 @@ namespace RpgInterpreter.Lexer.Sources
             {
                 _column++;
             }
-            
+
             return c;
         }
     }

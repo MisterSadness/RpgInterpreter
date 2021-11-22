@@ -7,10 +7,7 @@ namespace RpgInterpreter.Lexer.Sources
     {
         private readonly StreamReader _reader;
 
-        public FileSource(string path)
-        {
-            _reader = new StreamReader(path);
-        }
+        public FileSource(string path) => _reader = new StreamReader(path);
 
         public virtual char? Peek()
         {
@@ -21,7 +18,7 @@ namespace RpgInterpreter.Lexer.Sources
         public virtual char? Pop()
         {
             var result = _reader.Read();
-            return result == -1 ? null : (char) result;
+            return result == -1 ? null : (char)result;
         }
 
         public void Dispose()

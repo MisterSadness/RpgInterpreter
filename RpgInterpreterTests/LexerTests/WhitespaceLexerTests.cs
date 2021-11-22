@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using RpgInterpreter.Lexer;
+﻿using NUnit.Framework;
 using RpgInterpreter.Lexer.InnerLexers;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
@@ -12,8 +6,17 @@ using RpgInterpreter.Tokens;
 
 namespace RpgInterpreterTests.LexerTests
 {
-    class WhitespaceLexerTests
+    internal class WhitespaceLexerTests
     {
+        private static SingleTestData[] _whitespace =
+        {
+            new("  ", new Whitespace()),
+            new(" \t  \n\n\t  ", new Whitespace()),
+            new("\t", new Whitespace()),
+            new("\n", new Whitespace()),
+            new("    \t\n", new Whitespace())
+        };
+
         private readonly WhitespaceLexer _lexer = new();
 
         [TestCaseSource(nameof(_whitespace))]
@@ -23,14 +26,6 @@ namespace RpgInterpreterTests.LexerTests
 
             Assert.That(result, Is.EqualTo(data.Output));
         }
-
-        private static SingleTestData[] _whitespace = {
-            new ("  ", new Whitespace()),
-            new (" \t  \n\n\t  ", new Whitespace()),
-            new ("\t", new Whitespace()),
-            new ("\n", new Whitespace()),
-            new ("    \t\n", new Whitespace()),
-        };
 
         [Test]
         public void DoesNotAcceptEmptyString()

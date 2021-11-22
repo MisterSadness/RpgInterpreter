@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RpgInterpreter.Lexer.InnerLexers;
+﻿using RpgInterpreter.Lexer.InnerLexers;
 
 namespace RpgInterpreter.Lexer
 {
@@ -19,8 +15,6 @@ namespace RpgInterpreter.Lexer
             new WhitespaceLexer()
         };
 
-        public RpgLexer() : base(InnerLexers)
-        {
-        }
+        public RpgLexer() : base(InnerLexers) { }
     }
 }

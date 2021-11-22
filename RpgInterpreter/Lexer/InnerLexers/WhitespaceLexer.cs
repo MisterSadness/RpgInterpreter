@@ -7,6 +7,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
     public class WhitespaceLexer : InnerLexer
     {
         public override bool FirstCharacterMatches(char c) => char.IsWhiteSpace(c);
+
         public override Token Match(ICharSource source)
         {
             var c = source.Peek();
