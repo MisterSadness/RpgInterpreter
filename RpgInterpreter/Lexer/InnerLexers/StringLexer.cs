@@ -17,7 +17,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
             var starting = source.Pop();
             if (starting is not '"')
             {
-                throw new MissingOpeningQuote();
+                throw new MissingOpeningQuoteException();
             }
 
             var c = source.Pop();
@@ -29,39 +29,36 @@ namespace RpgInterpreter.Lexer.InnerLexers
                     sb.Append(c);
                 }
                 else if (c is '"')
-                {
+                {  
                     break;
+                }
+                else if (IsInnerString(c.Value))
+                {
+                    sb.Append(c);
                 }
                 else
                 {
-                    sb.Append(c);
+                    throw new InvalidCharacterException();
                 }
                 c = source.Pop();
             }
 
             if (c is not '"')
             {
-                throw new MissingClosingQuote();
+                throw new MissingClosingQuoteException();
             }
             
             return new StringLiteral(sb.ToString());
 
-            bool IsInnerString(char c)
-            {
-                return char.IsLetterOrDigit(c) || char.IsPunctuation(c) || c is ' ' or '\t';
-            }
+            bool IsInnerString(char x) => char.IsLetterOrDigit(x) || char.IsPunctuation(x) || x is ' ' or '\t';
 
-            char MatchEscaped()
+            char MatchEscaped() => source.Pop() switch
             {
-                var next = source.Pop();
-                return next switch
-                {
-                    'n' => '\n',
-                    '"' => '"',
-                    '\\' => '\\',
-                    _ => throw new UndefinedEscapeSequence()
-                };
-            }
+                'n' => '\n',
+                '"' => '"',
+                '\\' => '\\',
+                _ => throw new UndefinedEscapeSequenceException()
+            };
         }
     }
 }

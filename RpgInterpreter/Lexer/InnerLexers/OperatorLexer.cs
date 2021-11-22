@@ -10,7 +10,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
         public override bool FirstCharacterMatches(char c) => "-+*/=!<>|&.".Contains(c);
         public override Token Match(ICharSource source)
         {
-            var previous = source.Pop() ?? throw new UnexpectedEndOfInput();
+            var previous = source.Pop() ?? throw new UnexpectedEndOfInputException();
             var next = source.Peek();
 
             return (previous, next) switch
@@ -30,7 +30,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
                 ('>', _) => new Greater(),
                 ('.', _) => new Access(),
                 ('=', _) => new Assignment(),
-                (_, _) => throw new ArgumentOutOfRangeException()
+                (_, _) => throw new ArgumentOutOfRangeException() //FIXME
             };
 
             Token PopAndReturn(Token value)

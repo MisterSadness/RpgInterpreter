@@ -10,7 +10,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
         public abstract bool FirstCharacterMatches(char c);
         public abstract Token Match(ICharSource source);
 
-        public string MatchAll(ICharSource source, Predicate<char> predicate)
+        protected static string MatchAll(ICharSource source, Predicate<char> predicate)
         {
             var sb = new StringBuilder();
             var c = source.Peek();

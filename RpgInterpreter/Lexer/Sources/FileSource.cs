@@ -12,13 +12,13 @@ namespace RpgInterpreter.Lexer.Sources
             _reader = new StreamReader(path);
         }
 
-        public char? Peek()
+        public virtual char? Peek()
         {
             var result = _reader.Peek();
             return result == -1 ? null : (char)result;
         }
 
-        public char? Pop()
+        public virtual char? Pop()
         {
             var result = _reader.Read();
             return result == -1 ? null : (char) result;

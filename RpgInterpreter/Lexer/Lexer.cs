@@ -12,18 +12,15 @@ namespace RpgInterpreter.Lexer
     {
         private readonly IEnumerable<InnerLexer> _inner;
 
-        public Lexer(IEnumerable<InnerLexer> inner)
-        {
-            _inner = inner;
-        }
+        public Lexer(IEnumerable<InnerLexer> inner) => _inner = inner;
 
-        public IEnumerable<Token> Tokenize(ICharSource source)
+        public virtual IEnumerable<Token> Tokenize(ICharSource source)
         {
             var c = source.Peek();
             while (c.HasValue)
             {
-                var possible = _inner.FirstOrDefault(i => i.FirstCharacterMatches(c.Value))
-                    ?? throw new UnexpectedEndOfInput();
+                var possible = _inner.SingleOrDefault(i => i.FirstCharacterMatches(c.Value))
+                    ?? throw new UnexpectedEndOfInputException();
                 yield return possible.Match(source);
                 c = source.Peek();
             }

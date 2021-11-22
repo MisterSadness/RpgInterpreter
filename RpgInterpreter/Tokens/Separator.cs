@@ -10,4 +10,5 @@ namespace RpgInterpreter.Tokens
     public record OpenBrace : Separator;
     public record CloseBrace : Separator;
     public record Colon : Separator;
+    public record Comma : Separator;
 }

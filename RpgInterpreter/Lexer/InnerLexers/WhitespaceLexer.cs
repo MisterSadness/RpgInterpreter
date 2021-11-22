@@ -13,7 +13,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
 
             if (!c.HasValue || !char.IsWhiteSpace(c.Value))
             {
-                throw new UnexpectedInput();
+                throw new UnexpectedInputException();
             }
 
             while (c.HasValue && char.IsWhiteSpace(c.Value))

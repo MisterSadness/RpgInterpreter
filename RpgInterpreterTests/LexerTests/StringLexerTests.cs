@@ -16,7 +16,7 @@ namespace RpgInterpreterTests.LexerTests
         private readonly StringLexer _lexer = new();
 
         [TestCaseSource(nameof(_strings))]
-        public void UppercaseWordTest(SingleTestData data)
+        public void StringTest(SingleTestData data)
         {
             var result = _lexer.Match(data.Source);
 

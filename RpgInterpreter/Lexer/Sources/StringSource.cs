@@ -11,22 +11,18 @@
             _position = 0;
         }
 
-        public char? Peek()
-        {
-            if (_position < _string.Length)
-                return _string[_position];
-            return null;
-        }
+        public char? Peek() => _position < _string.Length ? _string[_position] : null;
 
         public char? Pop()
         {
-            if (_position < _string.Length)
+            if (_position >= _string.Length)
             {
-                var result = _string[_position];
-                _position++;
-                return result;
+                return null;
             }
-            return null;
+
+            var result = _string[_position];
+            _position++;
+            return result;
         }
     }
 }

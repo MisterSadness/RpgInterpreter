@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RpgInterpreter.Lexer.LexingErrors
 {
-    public class MissingClosingQuote : LexingException
+    public class InvalidCharacterException : LexingException
     {
     }
 }

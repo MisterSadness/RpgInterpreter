@@ -37,7 +37,7 @@ namespace RpgInterpreterTests.LexerTests
         {
             var source = new StringSource("");
 
-            Assert.Throws<UnexpectedInput>(() => _lexer.Match(source));
+            Assert.Throws<UnexpectedInputException>(() => _lexer.Match(source));
         }
     }
 }

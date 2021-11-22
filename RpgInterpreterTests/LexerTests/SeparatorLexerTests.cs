@@ -30,6 +30,7 @@ namespace RpgInterpreterTests.LexerTests
             new ("{", new OpenBrace()),
             new ("}", new CloseBrace()),
             new (":", new Colon()),
+            new (",", new Comma()),
         };
 
         [TestCaseSource(nameof(_separatorList))]

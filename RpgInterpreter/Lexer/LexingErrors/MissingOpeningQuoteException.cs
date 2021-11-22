@@ -2,8 +2,8 @@
 
 namespace RpgInterpreter.Lexer.LexingErrors
 {
-    public class UndefinedEscapeSequence : LexingException
+    public class MissingOpeningQuoteException : LexingException
     {
-    
+
     }
 }

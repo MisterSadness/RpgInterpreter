@@ -1,0 +1,43 @@
+﻿Entity {
+    Name: "Unknown",
+    Strength: 30,
+    Dexterity: 30,
+    Willpower: 30,
+    Health: (Strength + 2 * Dexterity) / 10
+    Equipment: []
+}
+trait Strong for Entity {
+    Strength: base.Strength + 103
+}
+
+fight(e1: Entity, e2: Entity): Entity {
+    r1 = 1d100() - e1.Strength / 10
+    r2 = 1d100() - e2.Strength / 10
+    result = r1 - r2
+    looser = if (result > 0)
+        then e2
+        else e1
+    winner = if (result > 0)
+        then e1
+        else e2
+    looser.Health = looser.Health - result
+    print(looser.Name ++ " lost " ++ result ++ " health.")
+    if (looser.Health <= 0)
+        then {
+            print(looser.Name ++ " has died!")
+            delete(looser)
+            print(winner.Name ++ " has won!")
+            winner
+        }
+        else {
+            print("Fight continues!")
+            fight(e1, e2)
+        }
+}
+
+fighter = Entity with Strong
+fighter.Name = "Marcus"
+bandit = Entity
+bandit.Name = "Otto"
+
+fight(fighter, bandit)

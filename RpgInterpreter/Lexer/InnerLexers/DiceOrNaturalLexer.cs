@@ -30,7 +30,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
                     return result;
                 }
 
-                throw new ExpectedIntegerLiteral();
+                throw new ExpectedIntegerLiteralException();
             }
         }
     }
