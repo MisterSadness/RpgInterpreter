@@ -2,7 +2,7 @@
 
 namespace RpgInterpreter.Lexer.LexingErrors
 {
-    class UnexpectedInput : Exception
+    public class UnexpectedInput : LexingException
     {
 
     }

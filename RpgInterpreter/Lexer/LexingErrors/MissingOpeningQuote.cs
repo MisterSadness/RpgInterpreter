@@ -2,7 +2,7 @@
 
 namespace RpgInterpreter.Lexer.LexingErrors
 {
-    class MissingQuote : Exception
+    public class MissingOpeningQuote : LexingException
     {
 
     }

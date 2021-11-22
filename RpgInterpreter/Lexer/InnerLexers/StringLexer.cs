@@ -13,33 +13,43 @@ namespace RpgInterpreter.Lexer.InnerLexers
         {
             var sb = new StringBuilder();
 
-            // Pop starting quote
+            // Pop starting quote, the exception shouldn't happen if we chose this lexer
             var starting = source.Pop();
             if (starting is not '"')
             {
-                throw new MissingQuote();
+                throw new MissingOpeningQuote();
             }
 
-            var c = source.Peek();
+            var c = source.Pop();
             while (c.HasValue)
             {
-                source.Pop();
                 if (c is '\\')
                 {
                     c = MatchEscaped();
+                    sb.Append(c);
                 }
-                sb.Append(c);
-                c = source.Peek();
+                else if (c is '"')
+                {
+                    break;
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+                c = source.Pop();
             }
 
-            // Pop ending quote
-            var ending = source.Pop();
-            if (ending is not '"')
+            if (c is not '"')
             {
-                throw new MissingQuote();
+                throw new MissingClosingQuote();
             }
             
             return new StringLiteral(sb.ToString());
+
+            bool IsInnerString(char c)
+            {
+                return char.IsLetterOrDigit(c) || char.IsPunctuation(c) || c is ' ' or '\t';
+            }
 
             char MatchEscaped()
             {
