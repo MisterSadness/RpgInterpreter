@@ -11,6 +11,7 @@ namespace RpgInterpreterTests.LexerTests
     {
         private static ListTestData[] _exactTokens =
         {
+            new("", Enumerable.Empty<Token>()),
             new(
                 "if ((42 * 3d3) == 12) then \"else\" else { fun([1d4, 1d4, 1d2], [], [[], [1], [1, 2]]) + -42 - --7 * \"abc\" / 1d4 }",
                 new Token[]
