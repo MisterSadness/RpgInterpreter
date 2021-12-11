@@ -58,6 +58,7 @@ namespace RpgInterpreter.Lexer.InnerLexers
                 return source.Pop() switch
                 {
                     'n' => '\n',
+                    't' => '\t',
                     '"' => '"',
                     '\\' => '\\',
                     _ => throw new UndefinedEscapeSequenceException()

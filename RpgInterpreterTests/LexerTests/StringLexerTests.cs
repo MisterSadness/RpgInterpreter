@@ -9,6 +9,7 @@ namespace RpgInterpreterTests.LexerTests
         private static SingleTestData[] _strings =
         {
             new("\"\"", new StringLiteral("")),
+            new("\"\\t\\n\"", new StringLiteral("\t\n")),
             new("\"Aaaaaaa\"", new StringLiteral("Aaaaaaa")),
             new("\"Jan_Kowalski_99\"", new StringLiteral("Jan_Kowalski_99")),
             new("\"new\\nline\"", new StringLiteral("new\nline")),
