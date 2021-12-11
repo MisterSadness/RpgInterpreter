@@ -2,4 +2,4 @@
 
 namespace RpgInterpreter.Tokens;
 
-public record PositionedToken(Token Token, Position Position) : Token;
+public record PositionedToken(Token Value, Position Start, Position End) : Token;

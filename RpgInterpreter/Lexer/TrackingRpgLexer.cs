@@ -10,13 +10,14 @@ namespace RpgInterpreter.Lexer;
 // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/yield#exception-handling
 public class TrackingRpgLexer : RpgLexer
 {
-    public override IEnumerable<Token> Tokenize(ICharSource source)
+    public override IEnumerable<PositionedToken> Tokenize(ICharSource source)
     {
         var trackingSource = new TrackingCharSource(source);
         using var enumerator = base.Tokenize(trackingSource).GetEnumerator();
 
         while (true)
         {
+            var tokenStart = trackingSource.Position;
             try
             {
                 if (!enumerator.MoveNext())
@@ -26,12 +27,13 @@ public class TrackingRpgLexer : RpgLexer
             }
             catch (LexingException exception)
             {
-                var position = trackingSource.Position;
-                var annotated = new PositionedLexingException(exception, position);
+                var errorPosition = trackingSource.Position;
+                var annotated = new PositionedLexingException(exception, errorPosition);
                 throw annotated;
             }
 
-            yield return enumerator.Current;
+            var tokenEnd = trackingSource.Position;
+            yield return new PositionedToken(enumerator.Current, tokenStart, tokenEnd);
         }
     }
 }
