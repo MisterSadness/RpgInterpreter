@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using RpgInterpreter.Lexer.InnerLexers;
+﻿using RpgInterpreter.Lexer.InnerLexers;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;

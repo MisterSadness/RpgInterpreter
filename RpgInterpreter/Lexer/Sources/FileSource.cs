@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace RpgInterpreter.Lexer.Sources;
+﻿namespace RpgInterpreter.Lexer.Sources;
 
 public class FileSource : ICharSource, IDisposable
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using RpgInterpreter.Lexer;
+﻿using RpgInterpreter.Lexer;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;

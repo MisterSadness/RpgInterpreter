@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using RpgInterpreter.Lexer.Sources;
+﻿using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;
 
 namespace RpgInterpreterTests.LexerTests;

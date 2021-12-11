@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;
 
