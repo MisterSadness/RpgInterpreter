@@ -1,20 +1,19 @@
-﻿namespace RpgInterpreter.Tokens
-{
-    public abstract record Separator : Token;
+﻿namespace RpgInterpreter.Tokens;
 
-    public record OpenParen : Separator;
+public abstract record Separator : Token;
 
-    public record CloseParen : Separator;
+public record OpenParen : Separator;
 
-    public record OpenBracket : Separator;
+public record CloseParen : Separator;
 
-    public record CloseBracket : Separator;
+public record OpenBracket : Separator;
 
-    public record OpenBrace : Separator;
+public record CloseBracket : Separator;
 
-    public record CloseBrace : Separator;
+public record OpenBrace : Separator;
 
-    public record Colon : Separator;
+public record CloseBrace : Separator;
 
-    public record Comma : Separator;
-}
+public record Colon : Separator;
+
+public record Comma : Separator;

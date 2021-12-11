@@ -1,4 +1,3 @@
-﻿namespace RpgInterpreter.Lexer.LexingErrors
-{
-    public class UnexpectedEndOfInputException : LexingException { }
-}
+﻿namespace RpgInterpreter.Lexer.LexingErrors;
+
+public class UnexpectedEndOfInputException : LexingException { }

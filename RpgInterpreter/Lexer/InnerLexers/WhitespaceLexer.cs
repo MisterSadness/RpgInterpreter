@@ -2,28 +2,27 @@
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;
 
-namespace RpgInterpreter.Lexer.InnerLexers
+namespace RpgInterpreter.Lexer.InnerLexers;
+
+public class WhitespaceLexer : InnerLexer
 {
-    public class WhitespaceLexer : InnerLexer
+    public override bool FirstCharacterMatches(char c) => char.IsWhiteSpace(c);
+
+    public override Token Match(ICharSource source)
     {
-        public override bool FirstCharacterMatches(char c) => char.IsWhiteSpace(c);
+        var c = source.Peek();
 
-        public override Token Match(ICharSource source)
+        if (!c.HasValue || !char.IsWhiteSpace(c.Value))
         {
-            var c = source.Peek();
-
-            if (!c.HasValue || !char.IsWhiteSpace(c.Value))
-            {
-                throw new UnexpectedInputException();
-            }
-
-            while (c.HasValue && char.IsWhiteSpace(c.Value))
-            {
-                source.Pop();
-                c = source.Peek();
-            }
-
-            return new Whitespace();
+            throw new UnexpectedInputException();
         }
+
+        while (c.HasValue && char.IsWhiteSpace(c.Value))
+        {
+            source.Pop();
+            c = source.Peek();
+        }
+
+        return new Whitespace();
     }
 }

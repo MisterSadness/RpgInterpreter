@@ -1,34 +1,33 @@
-﻿namespace RpgInterpreter.Tokens
-{
-    public abstract record Operator : Token;
+﻿namespace RpgInterpreter.Tokens;
 
-    public record Addition : Operator;
+public abstract record Operator : Token;
 
-    public record Minus : Operator;
+public record Addition : Operator;
 
-    public record Multiplication : Operator;
+public record Minus : Operator;
 
-    public record Division : Operator;
+public record Multiplication : Operator;
 
-    public record Assignment : Operator;
+public record Division : Operator;
 
-    public record Equality : Operator;
+public record Assignment : Operator;
 
-    public record Inequality : Operator;
+public record Equality : Operator;
 
-    public record Greater : Operator;
+public record Inequality : Operator;
 
-    public record Less : Operator;
+public record Greater : Operator;
 
-    public record GreaterOrEqual : Operator;
+public record Less : Operator;
 
-    public record LessOrEqual : Operator;
+public record GreaterOrEqual : Operator;
 
-    public record BooleanAnd : Operator;
+public record LessOrEqual : Operator;
 
-    public record BooleanOr : Operator;
+public record BooleanAnd : Operator;
 
-    public record Concatenation : Operator;
+public record BooleanOr : Operator;
 
-    public record Access : Operator;
-}
+public record Concatenation : Operator;
+
+public record Access : Operator;

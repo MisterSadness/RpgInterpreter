@@ -1,4 +1,3 @@
-﻿namespace RpgInterpreter.Lexer.LexingErrors
-{
-    public class UndefinedEscapeSequenceException : LexingException { }
-}
+﻿namespace RpgInterpreter.Lexer.LexingErrors;
+
+public class UndefinedEscapeSequenceException : LexingException { }

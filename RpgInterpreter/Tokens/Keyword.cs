@@ -1,24 +1,23 @@
-﻿namespace RpgInterpreter.Tokens
-{
-    public abstract record Keyword : Token;
+﻿namespace RpgInterpreter.Tokens;
 
-    public record If : Keyword;
+public abstract record Keyword : Token;
 
-    public record Then : Keyword;
+public record If : Keyword;
 
-    public record Else : Keyword;
+public record Then : Keyword;
 
-    public record Trait : Keyword;
+public record Else : Keyword;
 
-    public record For : Keyword;
+public record Trait : Keyword;
 
-    public record With : Keyword;
+public record For : Keyword;
 
-    public record Extends : Keyword;
+public record With : Keyword;
 
-    public record And : Keyword;
+public record Extends : Keyword;
 
-    public record Base : Keyword;
+public record And : Keyword;
 
-    public record This : Keyword;
-}
+public record Base : Keyword;
+
+public record This : Keyword;

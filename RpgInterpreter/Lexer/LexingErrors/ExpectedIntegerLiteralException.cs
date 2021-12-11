@@ -1,4 +1,3 @@
-﻿namespace RpgInterpreter.Lexer.LexingErrors
-{
-    public class ExpectedIntegerLiteralException : LexingException { }
-}
+﻿namespace RpgInterpreter.Lexer.LexingErrors;
+
+public class ExpectedIntegerLiteralException : LexingException { }
