@@ -30,6 +30,7 @@ internal class LowercaseWordLexerTests
         new("extends", new Extends()),
         new("and", new And()),
         new("base", new Base()),
-        new("this", new This())
+        new("this", new This()),
+        new("fun", new Fun())
     };
 }

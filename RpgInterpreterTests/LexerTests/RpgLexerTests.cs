@@ -13,14 +13,14 @@ internal class RpgLexerTests
     {
         new("", new Token[] { new EndOfInput() }),
         new(
-            "if ((42 * 3d3) == 12) then \"else\" else { fun([1d4, 1d4, 1d2], [], [[], [1], [1, 2]]) + -42 - --7 * \"abc\" / 1d4 }",
+            "if ((42 * 3d3) == 12) then \"else\" else { bar([1d4, 1d4, 1d2], [], [[], [1], [1, 2]]) + -42 - --7 * \"abc\" / 1d4 }",
             new Token[]
             {
                 new If(), new OpenParen(), new OpenParen(), new NaturalLiteral(42), new Multiplication(),
                 new DiceLiteral(3, 3), new CloseParen(),
                 new Equality(), new NaturalLiteral(12), new CloseParen(), new Then(), new StringLiteral("else"),
                 new Else(), new OpenBrace(),
-                new LowercaseIdentifier("fun"), new OpenParen(), new OpenBracket(), new DiceLiteral(1, 4),
+                new LowercaseIdentifier("bar"), new OpenParen(), new OpenBracket(), new DiceLiteral(1, 4),
                 new Comma(), new DiceLiteral(1, 4),
                 new Comma(), new DiceLiteral(1, 2), new CloseBracket(), new Comma(), new OpenBracket(),
                 new CloseBracket(), new Comma(),
