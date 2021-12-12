@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Optional.Unsafe;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;
@@ -14,13 +15,13 @@ public class StringLexer : InnerLexer
         var sb = new StringBuilder();
 
         // Pop starting quote, the exception shouldn't happen if we chose this lexer
-        var starting = source.Pop();
+        var starting = source.Pop().ToNullable();
         if (starting is not '"')
         {
             throw new MissingOpeningQuoteException();
         }
 
-        var c = source.Pop();
+        var c = source.Pop().ToNullable();
         while (c.HasValue)
         {
             if (c is '\\')
@@ -41,7 +42,7 @@ public class StringLexer : InnerLexer
                 throw new InvalidCharacterException();
             }
 
-            c = source.Pop();
+            c = source.Pop().ToNullable();
         }
 
         if (c is not '"')
@@ -55,7 +56,7 @@ public class StringLexer : InnerLexer
 
         char MatchEscaped()
         {
-            return source.Pop() switch
+            return source.Pop().ToNullable() switch
             {
                 'n' => '\n',
                 't' => '\t',

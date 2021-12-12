@@ -1,4 +1,5 @@
-﻿using RpgInterpreter.Lexer.LexingErrors;
+﻿using Optional.Unsafe;
+using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;
 
@@ -10,7 +11,7 @@ public class SeparatorLexer : InnerLexer
 
     public override Token Match(ICharSource source)
     {
-        var c = source.Pop() ?? throw new UnexpectedEndOfInputException();
+        var c = source.Pop().ToNullable() ?? throw new UnexpectedEndOfInputException();
 
         return c switch
         {
@@ -22,7 +23,7 @@ public class SeparatorLexer : InnerLexer
             '}' => new CloseBrace(),
             ':' => new Colon(),
             ',' => new Comma(),
-            _ => throw new UnexpectedEndOfInputException()
+            _ => throw new UnexpectedEndOfInputException() // FIXME
         };
     }
 }

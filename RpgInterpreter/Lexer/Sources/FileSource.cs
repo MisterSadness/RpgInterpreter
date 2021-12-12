@@ -1,4 +1,7 @@
-﻿namespace RpgInterpreter.Lexer.Sources;
+﻿using Optional;
+using RpgInterpreter.Utils;
+
+namespace RpgInterpreter.Lexer.Sources;
 
 public class FileSource : ICharSource, IDisposable
 {
@@ -6,20 +9,14 @@ public class FileSource : ICharSource, IDisposable
 
     public FileSource(string path) => _reader = new StreamReader(path);
 
-    public virtual char? Peek()
-    {
-        var result = _reader.Peek();
-        return result == -1 ? null : (char)result;
-    }
+    public virtual Option<char> Peek() => ToOptional(_reader.Peek());
 
-    public virtual char? Pop()
-    {
-        var result = _reader.Read();
-        return result == -1 ? null : (char)result;
-    }
+    public virtual Option<char> Pop() => ToOptional(_reader.Read());
 
     public void Dispose()
     {
         _reader.Dispose();
     }
+
+    private static Option<char> ToOptional(int i) => i.SomeWhen(i != -1).Map(c => (char)c);
 }

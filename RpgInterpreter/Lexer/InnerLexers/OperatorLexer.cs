@@ -1,4 +1,5 @@
-﻿using RpgInterpreter.Lexer.LexingErrors;
+﻿using Optional.Unsafe;
+using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Tokens;
 
@@ -10,8 +11,8 @@ public class OperatorLexer : InnerLexer
 
     public override Token Match(ICharSource source)
     {
-        var previous = source.Pop() ?? throw new UnexpectedEndOfInputException();
-        var next = source.Peek();
+        var previous = source.Pop().ToNullable() ?? throw new UnexpectedEndOfInputException();
+        var next = source.Peek().ToNullable();
 
         return (previous, next) switch
         {

@@ -9,15 +9,14 @@ public abstract class InnerLexer
     public abstract bool FirstCharacterMatches(char c);
     public abstract Token Match(ICharSource source);
 
-    protected static string MatchAll(ICharSource source, Predicate<char> predicate)
+    protected static string MatchAll(ICharSource source, Func<char, bool> predicate)
     {
         var sb = new StringBuilder();
-        var c = source.Peek();
-        while (c.HasValue && predicate(c.Value))
+        var option = source.Peek();
+        while (option.Exists(predicate))
         {
-            source.Pop();
-            sb.Append(c);
-            c = source.Peek();
+            source.Pop().MatchSome(c => sb.Append(c));
+            option = source.Peek();
         }
 
         return sb.ToString();

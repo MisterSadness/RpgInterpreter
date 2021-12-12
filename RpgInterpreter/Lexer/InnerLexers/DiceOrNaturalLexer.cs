@@ -13,7 +13,7 @@ public class DiceOrNaturalLexer : InnerLexer
         var firstInt = MatchInt();
         var separator = source.Peek();
 
-        if (separator is not 'd')
+        if (!separator.Exists(c => c == 'd'))
         {
             return new NaturalLiteral(firstInt);
         }

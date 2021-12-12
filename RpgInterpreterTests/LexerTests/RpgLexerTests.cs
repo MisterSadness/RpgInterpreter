@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Optional;
 using RpgInterpreter.Lexer;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
@@ -66,7 +67,8 @@ internal class RpgLexerTests
         var result = _lexer.Tokenize(source).ToArray();
 
         Assert.That(result, Is.Not.Empty);
-        Assert.That(source.Peek(), Is.Null, () => "There should be no characters left in the source.");
+        Assert.That(source.Peek(), Is.EqualTo(Option.None<char>()),
+            () => "There should be no characters left in the source.");
     }
 
     [TestCase("if \"\\n\"\r\n  then \"abc\"\r\n  else \"xyz     \r\n\r\n\r\n\r\nabc\"")]

@@ -10,17 +10,17 @@ public class WhitespaceLexer : InnerLexer
 
     public override Token Match(ICharSource source)
     {
-        var c = source.Peek();
+        var option = source.Peek();
 
-        if (!c.HasValue || !char.IsWhiteSpace(c.Value))
+        if (!option.Exists(char.IsWhiteSpace))
         {
             throw new UnexpectedInputException();
         }
 
-        while (c.HasValue && char.IsWhiteSpace(c.Value))
+        while (option.Exists(char.IsWhiteSpace))
         {
             source.Pop();
-            c = source.Peek();
+            option = source.Peek();
         }
 
         return new Whitespace();

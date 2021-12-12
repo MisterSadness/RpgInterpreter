@@ -1,4 +1,7 @@
-﻿namespace RpgInterpreter.Lexer.Sources;
+﻿using Optional;
+using RpgInterpreter.Utils;
+
+namespace RpgInterpreter.Lexer.Sources;
 
 public class StringSource : ICharSource
 {
@@ -11,17 +14,14 @@ public class StringSource : ICharSource
         _position = 0;
     }
 
-    public char? Peek() => _position < _string.Length ? _string[_position] : null;
+    public Option<char> Peek() => _position
+        .SomeWhen(_position < _string.Length)
+        .Map(p => _string[p]);
 
-    public char? Pop()
+    public Option<char> Pop()
     {
-        if (_position >= _string.Length)
-        {
-            return null;
-        }
-
-        var result = _string[_position];
-        _position++;
+        var result = Peek();
+        result.MatchSome(_ => _position++);
         return result;
     }
 }

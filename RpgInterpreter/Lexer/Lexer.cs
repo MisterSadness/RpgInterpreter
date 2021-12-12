@@ -16,7 +16,7 @@ public class Lexer
         var c = source.Peek();
         while (c.HasValue)
         {
-            var possible = _inner.SingleOrDefault(i => i.FirstCharacterMatches(c.Value))
+            var possible = _inner.SingleOrDefault(i => c.Exists(i.FirstCharacterMatches))
                            ?? throw new UnexpectedInputException();
             yield return possible.Match(source);
             c = source.Peek();
