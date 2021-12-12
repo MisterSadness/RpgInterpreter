@@ -21,5 +21,7 @@ public class Lexer
             yield return possible.Match(source);
             c = source.Peek();
         }
+
+        yield return new EndOfInput();
     }
 }

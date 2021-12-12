@@ -15,3 +15,5 @@ public record NaturalLiteral(int Value) : Token;
 public record BooleanLiteral(bool Value) : Token;
 
 public record StringLiteral(string Value) : Token;
+
+public record EndOfInput : Token;

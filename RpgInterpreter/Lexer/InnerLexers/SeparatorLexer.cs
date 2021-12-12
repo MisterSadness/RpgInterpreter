@@ -7,7 +7,7 @@ namespace RpgInterpreter.Lexer.InnerLexers;
 
 public class SeparatorLexer : InnerLexer
 {
-    public override bool FirstCharacterMatches(char c) => "(){}[]:,".Contains(c);
+    public override bool FirstCharacterMatches(char c) => "(){}[]:;,".Contains(c);
 
     public override Token Match(ICharSource source)
     {
@@ -22,6 +22,7 @@ public class SeparatorLexer : InnerLexer
             '{' => new OpenBrace(),
             '}' => new CloseBrace(),
             ':' => new Colon(),
+            ';' => new Semicolon(),
             ',' => new Comma(),
             _ => throw new UnexpectedEndOfInputException() // FIXME
         };

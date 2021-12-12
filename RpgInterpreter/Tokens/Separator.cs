@@ -16,4 +16,6 @@ public record CloseBrace : Separator;
 
 public record Colon : Separator;
 
+public record Semicolon : Separator;
+
 public record Comma : Separator;

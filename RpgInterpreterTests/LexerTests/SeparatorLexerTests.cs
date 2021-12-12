@@ -16,22 +16,24 @@ internal class SeparatorLexerTests
         new("{", new OpenBrace()),
         new("}", new CloseBrace()),
         new(":", new Colon()),
+        new(";", new Semicolon()),
         new(",", new Comma())
     };
 
     private static ListTestData[] _separatorList =
     {
-        new("()(((", new Separator[]
+        new("()(((", new Token[]
         {
-            new OpenParen(), new CloseParen(), new OpenParen(), new OpenParen(), new OpenParen()
+            new OpenParen(), new CloseParen(), new OpenParen(), new OpenParen(), new OpenParen(), new EndOfInput()
         }),
-        new(")[}{", new Separator[]
+        new(")[}{;", new Token[]
         {
-            new CloseParen(), new OpenBracket(), new CloseBrace(), new OpenBrace()
+            new CloseParen(), new OpenBracket(), new CloseBrace(), new OpenBrace(), new Semicolon(), new EndOfInput()
         }),
-        new("][::][", new Separator[]
+        new("][::][", new Token[]
         {
-            new CloseBracket(), new OpenBracket(), new Colon(), new Colon(), new CloseBracket(), new OpenBracket()
+            new CloseBracket(), new OpenBracket(), new Colon(), new Colon(), new CloseBracket(), new OpenBracket(),
+            new EndOfInput()
         })
     };
 
