@@ -12,6 +12,8 @@ public record Block : NonTerminal;
 
 public record BlockInner : NonTerminal;
 
+public record SingleBlockLine : NonTerminal;
+
 public record Value : NonTerminal;
 
 public record Name : NonTerminal;
@@ -89,3 +91,5 @@ public record ObjectCreation : NonTerminal;
 public record Function : NonTerminal;
 
 public record FunctionParameters : NonTerminal;
+
+public record FunctionParametersNext : NonTerminal;

@@ -1,7 +1,7 @@
 ﻿using RpgInterpreter.Lexer;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
-using RpgInterpreter.Tokens;
+using RpgInterpreter.Parser;
 
 if (args.Length == 1 && File.Exists(args[0]))
 {
@@ -10,10 +10,14 @@ if (args.Length == 1 && File.Exists(args[0]))
 
     try
     {
-        var tokens = lexer.Tokenize(source).ToArray();
-        Console.WriteLine($"Successfully parsed, result token total: {tokens.Length}");
-        Console.WriteLine("Result tokens (without whitespace):");
-        foreach (var token in tokens.Select(t => t.Value).Where(t => t is not Whitespace)) Console.WriteLine(token);
+        //var tokens = lexer.Tokenize(source).ToArray();
+        //Console.WriteLine($"Successfully lexed, result token total: {tokens.Length}");
+        //Console.WriteLine("Result tokens (without whitespace):");
+        //foreach (var token in tokens.Select(t => t.Value).Where(t => t is not Whitespace)) Console.WriteLine(token);
+
+        var parser = new Parser(source);
+        var parsingResult = parser.Parse();
+        Console.WriteLine(parsingResult);
     }
     catch (LexingException e)
     {

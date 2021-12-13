@@ -8,6 +8,8 @@ public abstract record Production
 {
     public abstract NonTerminal LeftSide { get; }
     public abstract Symbol[] RightSide { get; init; }
+
+    public string Formatted => $"{LeftSide} -> {string.Join(" , ", RightSide.Select(x => x.ToString()))}";
 }
 
 public record Production<T>(Symbol[] RightSide) : Production where T : NonTerminal, new()
@@ -35,14 +37,18 @@ public record Statement_Trait() : Production<Statement>(new Symbol[] { new NonTe
 
 public record Statement_Function() : Production<Statement>(new Symbol[] { new NonTerminals.Function() });
 
-public record Statement_Expression() : Production<Statement>(new Symbol[] { new NonTerminals.Expression() });
+public record Statement_FunctionCall() : Production<Statement>(new Symbol[]
+{
+    new Paren(),
+    new NonTerminals.Invoke()
+});
 
 public record Expression_If() : Production<NonTerminals.Expression>(new Symbol[]
 {
     new NonTerminals.If()
 });
 
-public record Expression_Assignment() : Production<NonTerminals.Expression>(new Symbol[]
+public record Statement_Assignment() : Production<Statement>(new Symbol[]
 {
     new NonTerminals.Assignment()
 });
@@ -203,6 +209,11 @@ public record Paren_Block() : Production<Paren>(new Symbol[]
     new NonTerminals.Block()
 });
 
+public record Paren_Name() : Production<Paren>(new Symbol[]
+{
+    new Name()
+});
+
 public record Block() : Production<NonTerminals.Block>(new Symbol[]
 {
     new Terminal<OpenBrace>(), new BlockInner(), new Terminal<CloseBrace>()
@@ -212,7 +223,22 @@ public record BlockInner_Epsilon() : Production<BlockInner>(new Symbol[] { new E
 
 public record BlockInner_List() : Production<BlockInner>(new Symbol[]
 {
-    new NonTerminals.Expression(), new Terminal<Semicolon>(), new BlockInner()
+    new SingleBlockLine(), new Terminal<Semicolon>(), new BlockInner()
+});
+
+public record SingleBlockLine_If() : Production<SingleBlockLine>(new Symbol[]
+{
+    new NonTerminals.If()
+});
+
+public record SingleBlockLine_Assignment() : Production<SingleBlockLine>(new Symbol[]
+{
+    new NonTerminals.Assignment()
+});
+
+public record SingleBlockLine_Invoke() : Production<SingleBlockLine>(new Symbol[]
+{
+    new Paren(), new NonTerminals.Invoke()
 });
 
 public record Value_Dice() : Production<Value>(new Symbol[]
@@ -247,16 +273,8 @@ public record Value_ObjectCreation() : Production<Value>(new Symbol[]
 
 public record Assignment() : Production<NonTerminals.Assignment>(new Symbol[]
 {
-    new Name(), new NonTerminals.AssignmentOption()
+    new Terminal<Set>(), new Name(), new Terminal<Tokens.Assignment>(), new NonTerminals.Expression()
 });
-
-public record AssignmentOption() : Production<NonTerminals.AssignmentOption>(new Symbol[]
-{
-    new Terminal<Tokens.Assignment>(), new NonTerminals.Expression()
-});
-
-public record AssignmentOption_Eps() : Production<NonTerminals.AssignmentOption>(new Symbol[]
-    { new Epsilon() });
 
 public record Name_Id() : Production<Name>(new Symbol[]
 {
@@ -386,8 +404,18 @@ public record Function() : Production<NonTerminals.Function>(new Symbol[]
 
 public record FunctionParameters() : Production<NonTerminals.FunctionParameters>(new Symbol[]
 {
-    new Terminal<LowercaseIdentifier>(), new Terminal<Colon>(), new Terminal<UppercaseIdentifier>()
+    new Terminal<LowercaseIdentifier>(), new Terminal<Colon>(), new Terminal<UppercaseIdentifier>(),
+    new NonTerminals.FunctionParametersNext()
 });
 
 public record FunctionParameters_Eps() : Production<NonTerminals.FunctionParameters>(new Symbol[]
+    { new Epsilon() });
+
+public record FunctionParametersNext() : Production<NonTerminals.FunctionParametersNext>(new Symbol[]
+{
+    new Terminal<Comma>(), new Terminal<LowercaseIdentifier>(), new Terminal<Colon>(),
+    new Terminal<UppercaseIdentifier>(), new NonTerminals.FunctionParametersNext()
+});
+
+public record FunctionParametersNext_Eps() : Production<NonTerminals.FunctionParametersNext>(new Symbol[]
     { new Epsilon() });

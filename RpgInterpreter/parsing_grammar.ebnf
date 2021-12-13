@@ -1,8 +1,10 @@
 syntax = program;
 program = | statement, ";", program ;
-statement = object declaration | trait declaration | function | expression;
+statement = object declaration | trait declaration | function | assignment | paren, invoke;
 
-expression = if | assignment | start1, next1 ;
+assignment = "set", name, "=", expression ;
+
+expression = if | start1, next1 ;
 
 start1 = start2, next2;
 next1 = "&&" , expression | "||" , expression | ;
@@ -26,15 +28,13 @@ invoke = "(", invoke inner, ")";
 invoke inner = expression, invoke list | ;
 invoke list = ",", expression, invoke list | ;
 
-paren = "(", expression, ")" | value | block ;
+paren = "(", expression, ")" | value | block | name;
 block = "{", block inner, "}";
-block inner = | expression, ";" , block inner;
+block inner = | single block line, ";", block inner;
+single block line = if | paren, invoke | assignment;
 value = dice literal | natural literal | bool literal | string literal | list literal | object creation;
-assignment = name, assignment option
-assignment option = "=", expression | ;
 name = low id , field reference | base , field reference | this, field reference;
 field reference = "." , up id | ;
-
 
 list literal = "[" , inner list , "]";
 inner list = expression, inner list cont | ;
@@ -58,7 +58,8 @@ trait requirements = "for", up id | ;
 object creation = "new", up id, trait list start;
 
 function = "fun", low id, "(", function parameters, ")", block;
-function parameters = low id, ":", up id | ;
+function parameters = low id, ":", up id, function parameter next | ;
+function parameters next = ",", low id, ":", up id, function parameter next | ;
 
 base = "base";
 this = "this";

@@ -1,10 +1,8 @@
-﻿using Optional;
-using Optional.Collections;
-using RpgInterpreter.Lexer;
-using RpgInterpreter.Lexer.Sources;
+﻿using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.NonTerminals;
 using RpgInterpreter.Productions;
 using RpgInterpreter.Tokens;
+using RpgInterpreter.Utils;
 
 namespace RpgInterpreter.Parser;
 
@@ -13,6 +11,18 @@ public class Parser
     private readonly TokenSource _tokenSource;
     private readonly ParsingTable _parsingTable;
     private readonly Stack<Symbol> _stack;
+
+    public Parser(ICharSource source)
+    {
+        _tokenSource = TokenSource.FromCharSource(source);
+        var productions = Reflection.GetInstancesOfAllTypesInheriting<Production>();
+
+        _parsingTable = new ParsingTableGenerator(productions).CalculateParsingTable();
+
+        _stack = new Stack<Symbol>();
+        _stack.Push(new Terminal<EndOfInput>());
+        _stack.Push(new Syntax());
+    }
 
     public Parser(TokenSource tokenSource, ParsingTable parsingTable, Symbol startSymbol)
     {
@@ -23,37 +33,61 @@ public class Parser
         _stack.Push(startSymbol);
     }
 
-    public virtual void Parse()
+    public ParsingResult Parse()
     {
         ParsingResult state = new Success();
         while (_stack.Any() && state is not Failure)
         {
-            var top = _stack.Pop();
-            var input = _tokenSource.Peek().Value;
-            var inputType = input.GetType();
+            var top = _stack.Peek();
+            var input = _tokenSource.Peek();
             state = (top, input) switch
             {
-                (Terminal<EndOfInput>, EndOfInput) => new Success(),
-                (NonTerminal nt, { }) => HandleNonTerminals(nt, inputType),
+                (Terminal<EndOfInput>, { Value: EndOfInput }) => Finish(),
+                (NonTerminal nt, { }) => HandleNonTerminals(nt, input),
                 (Terminal t, { }) => HandleTerminals(t, input),
                 _ => new Failure()
             };
         }
+
+        return state;
     }
 
-    private ParsingResult HandleNonTerminals(NonTerminal left, Type right)
+    private ParsingResult Finish()
     {
-        var production = _parsingTable.Find(left, right);
         _stack.Pop();
-
         return new Success();
     }
 
-    private ParsingResult HandleTerminals(Terminal left, Token right)
+    private ParsingResult HandleNonTerminals(NonTerminal left, PositionedToken right)
     {
-        if (left.TokenType != right.GetType())
+        var rightType = right.Value.GetType();
+
+        var option = _parsingTable.Find(left, rightType);
+        _stack.Pop();
+
+        if (option.HasValue)
         {
-            return new Failure();
+            option.MatchSome(production =>
+            {
+                if (production.RightSide.Length != 1 || production.RightSide.Single() is not Epsilon)
+                {
+                    foreach (var symbol in production.RightSide.Reverse())
+                        _stack.Push(symbol);
+                }
+
+                Console.WriteLine(production.Formatted);
+            });
+            return new Success();
+        }
+
+        throw new UnexpectedTokenException(right);
+    }
+
+    private ParsingResult HandleTerminals(Terminal left, PositionedToken right)
+    {
+        if (left.TokenType != right.Value.GetType())
+        {
+            throw new ExpectedTokenNotFoundException(left, right);
         }
 
         _stack.Pop();
@@ -62,53 +96,16 @@ public class Parser
     }
 }
 
-public record ParsingResult;
-
-public record Success : ParsingResult;
-
-public record Failure : ParsingResult;
-
 public class ParsingException : Exception { }
 
-public class ParsingTable
+public class UnexpectedTokenException : Exception
 {
-    private readonly Dictionary<(NonTerminal, Type), Production> _table;
-    public ParsingTable(Dictionary<(NonTerminal, Type), Production> table) => _table = table;
-
-    public Option<Production> Find(NonTerminal nonTerminal, Type nextInputType) =>
-        _table.GetValueOrNone((nonTerminal, nextInputType));
+    public UnexpectedTokenException(PositionedToken unexpected) : base(
+        $"An unexpected token {unexpected.Value} found at position {unexpected.Start.Formatted}.") { }
 }
 
-public record Symbol;
-
-public abstract record Terminal : Symbol
+public class ExpectedTokenNotFoundException : Exception
 {
-    public abstract Type TokenType { get; }
+    public ExpectedTokenNotFoundException(Terminal expected, PositionedToken actual) : base(
+        $"Expected to find {expected} but found {actual.Value} at position {actual.Start.Formatted}.") { }
 }
-
-public record Epsilon : Terminal<Whitespace>;
-
-public record Terminal<T> : Terminal where T : Token
-{
-    public override Type TokenType { get; } = typeof(T);
-}
-
-public class TokenSource
-{
-    private readonly IEnumerator<PositionedToken> _tokens;
-
-    public TokenSource(IEnumerable<PositionedToken> tokens) =>
-        _tokens = tokens.GetEnumerator();
-
-    public static TokenSource FromCharSource(ICharSource source) =>
-        new(new TrackingRpgLexer().Tokenize(source));
-
-    public PositionedToken Peek() => _tokens.Current;
-
-    public PositionedToken Pop()
-    {
-        _tokens.MoveNext();
-        return _tokens.Current;
-    }
-}
-

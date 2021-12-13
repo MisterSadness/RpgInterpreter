@@ -25,6 +25,7 @@ public class LowercaseWordLexer : InnerLexer
             "this" => new This(),
             "fun" => new Fun(),
             "new" => new New(),
+            "set" => new Set(),
             "true" => new BooleanLiteral(true),
             "false" => new BooleanLiteral(false),
             _ => new LowercaseIdentifier(wholeString)

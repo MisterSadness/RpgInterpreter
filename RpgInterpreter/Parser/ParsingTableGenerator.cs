@@ -135,7 +135,7 @@ public record ParsingTableGenerator(IEnumerable<Production> Productions)
             return _firsts.GetValueOrDefault(nt, new HashSet<Terminal>());
         }
 
-        throw new YouFuckedUpYourGrammarException();
+        throw new YouMessedUpYourGrammarException();
     }
 
     public ParsingTable CalculateParsingTable()
@@ -157,7 +157,7 @@ public record ParsingTableGenerator(IEnumerable<Production> Productions)
             {
                 if (resultTable.ContainsKey((nonTerminal, tokenType)))
                 {
-                    throw new YouFuckedUpYourGrammarException();
+                    throw new YouMessedUpYourGrammarException();
                 }
 
                 resultTable[(nonTerminal, tokenType)] = production;
@@ -167,7 +167,7 @@ public record ParsingTableGenerator(IEnumerable<Production> Productions)
             {
                 if (resultTable.ContainsKey((nonTerminal, tokenType)))
                 {
-                    throw new YouFuckedUpYourGrammarException();
+                    throw new YouMessedUpYourGrammarException();
                 }
 
                 resultTable[(nonTerminal, tokenType)] = production;
@@ -178,4 +178,4 @@ public record ParsingTableGenerator(IEnumerable<Production> Productions)
     }
 }
 
-public class YouFuckedUpYourGrammarException : Exception { }
+public class YouMessedUpYourGrammarException : Exception { }
