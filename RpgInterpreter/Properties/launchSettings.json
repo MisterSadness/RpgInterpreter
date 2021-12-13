@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RpgInterpreter": {
+      "commandName": "Project",
+      "commandLineArgs": "example.rpg"
+    }
+  }
+}
