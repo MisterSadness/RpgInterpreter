@@ -23,3 +23,5 @@ public record Base : Keyword;
 public record This : Keyword;
 
 public record Fun : Keyword;
+
+public record New : Keyword;

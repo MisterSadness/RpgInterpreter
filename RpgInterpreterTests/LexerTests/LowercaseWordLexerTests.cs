@@ -27,6 +27,7 @@ internal class LowercaseWordLexerTests
         new("trait", new Trait()),
         new("for", new For()),
         new("with", new With()),
+        new("new", new New()),
         new("extends", new Extends()),
         new("and", new And()),
         new("base", new Base()),
