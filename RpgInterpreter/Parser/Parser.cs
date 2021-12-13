@@ -2,6 +2,7 @@
 using RpgInterpreter.NonTerminals;
 using RpgInterpreter.Productions;
 using RpgInterpreter.Tokens;
+using RpgInterpreter.Tree;
 using RpgInterpreter.Utils;
 
 namespace RpgInterpreter.Parser;
@@ -11,6 +12,7 @@ public class Parser
     private readonly TokenSource _tokenSource;
     private readonly ParsingTable _parsingTable;
     private readonly Stack<Symbol> _stack;
+    private readonly ParseTree _tree = new();
 
     public Parser(ICharSource source)
     {
@@ -20,17 +22,8 @@ public class Parser
         _parsingTable = new ParsingTableGenerator(productions).CalculateParsingTable();
 
         _stack = new Stack<Symbol>();
-        _stack.Push(new Terminal<EndOfInput>());
+        _tree.BeginSubtree();
         _stack.Push(new Syntax());
-    }
-
-    public Parser(TokenSource tokenSource, ParsingTable parsingTable, Symbol startSymbol)
-    {
-        _tokenSource = tokenSource;
-        _parsingTable = parsingTable;
-        _stack = new Stack<Symbol>();
-        _stack.Push(new Terminal<EndOfInput>());
-        _stack.Push(startSymbol);
     }
 
     public ParsingResult Parse()
@@ -42,6 +35,7 @@ public class Parser
             var input = _tokenSource.Peek();
             state = (top, input) switch
             {
+                (ProductionEnd p, _) => HandleProductionEnd(p),
                 (Terminal<EndOfInput>, { Value: EndOfInput }) => Finish(),
                 (NonTerminal nt, { }) => HandleNonTerminals(nt, input),
                 (Terminal t, { }) => HandleTerminals(t, input),
@@ -52,9 +46,17 @@ public class Parser
         return state;
     }
 
+    private ParsingResult HandleProductionEnd(ProductionEnd productionEnd)
+    {
+        _stack.Pop();
+        _tree.EndSubtree(productionEnd.Start);
+        return new Success();
+    }
+
     private ParsingResult Finish()
     {
         _stack.Pop();
+        _tree.EndSubtree(new Syntax());
         return new Success();
     }
 
@@ -64,23 +66,25 @@ public class Parser
 
         var option = _parsingTable.Find(left, rightType);
         _stack.Pop();
+        _tree.BeginSubtree();
+        _stack.Push(new ProductionEnd(left));
 
-        if (option.HasValue)
+        if (!option.HasValue)
         {
-            option.MatchSome(production =>
-            {
-                if (production.RightSide.Length != 1 || production.RightSide.Single() is not Epsilon)
-                {
-                    foreach (var symbol in production.RightSide.Reverse())
-                        _stack.Push(symbol);
-                }
-
-                Console.WriteLine(production.Formatted);
-            });
-            return new Success();
+            throw new UnexpectedTokenException(right);
         }
 
-        throw new UnexpectedTokenException(right);
+        option.MatchSome(production =>
+        {
+            if (production.RightSide.Length != 1 || production.RightSide.Single() is not Epsilon)
+            {
+                foreach (var symbol in production.RightSide.Reverse())
+                    _stack.Push(symbol);
+            }
+
+            Console.WriteLine(production.Formatted);
+        });
+        return new Success();
     }
 
     private ParsingResult HandleTerminals(Terminal left, PositionedToken right)
@@ -91,6 +95,7 @@ public class Parser
         }
 
         _stack.Pop();
+        _tree.AddLeaf(left, right);
         _tokenSource.Pop();
         return new Success();
     }
