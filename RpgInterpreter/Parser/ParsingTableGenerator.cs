@@ -79,10 +79,6 @@ public record ParsingTableGenerator(IEnumerable<Production> Productions)
                         {
                             var preCount = rightFollow.Count;
                             rightFollow.UnionWith(leftFollow);
-                            if (nonTerminal == new Next6())
-                            {
-                                ;
-                            }
 
                             var postCount = rightFollow.Count;
                             change |= preCount != postCount;
@@ -96,7 +92,8 @@ public record ParsingTableGenerator(IEnumerable<Production> Productions)
                         {
                             postfixFirst.Add(term);
                         }
-                        else if (postfixHead is NonTerminal nt)
+                        else if
+                            (postfixHead is NonTerminal nt) //handle whole postfix first instead of just the first(nt)
                         {
                             postfixFirst = _firsts.GetValueOrDefault(nt, new HashSet<Terminal>());
                         }
@@ -104,6 +101,8 @@ public record ParsingTableGenerator(IEnumerable<Production> Productions)
                         foreach (var t in postfixFirst.Where(t => t is not Epsilon))
                             change |= rightFollow.Add(t);
 
+                        // T -> A B c
+                        // B -> b | E
                         if (postfixFirst.Any(t => t is Epsilon))
                         {
                             var preCount = rightFollow.Count;
