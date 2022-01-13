@@ -43,7 +43,7 @@ inner list cont = "," , expression, inner list cont | ;
 if = "if", expression, "then", expression, "else", expression;
 
 object declaration = up id, base list, obj inner ;
-base list = "extends", up id, trait list | ;
+base list = "extends", up id, trait list start | ;
 trait list start = "with", up id, trait list next | ;
 trait list next = "and", up id, trait list next | ;
 fields = field, field list | ;
