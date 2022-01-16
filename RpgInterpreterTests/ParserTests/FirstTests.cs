@@ -1,13 +1,14 @@
 ﻿using System.Reflection;
 using NUnit.Framework;
+using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.NonTerminals;
 using RpgInterpreter.Parser;
 using RpgInterpreter.Productions;
-using RpgInterpreter.Tokens;
-using If = RpgInterpreter.Tokens.If;
+using If = RpgInterpreter.Lexer.Tokens.If;
 
 namespace RpgInterpreterTests.ParserTests;
 
+[Ignore("Ignore old parser tests")]
 internal class FirstTests
 {
     [TestCase]

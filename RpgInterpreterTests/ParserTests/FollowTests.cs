@@ -1,12 +1,13 @@
 ﻿using System.Reflection;
 using NUnit.Framework;
+using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.NonTerminals;
 using RpgInterpreter.Parser;
 using RpgInterpreter.Productions;
-using RpgInterpreter.Tokens;
 
 namespace RpgInterpreterTests.ParserTests
 {
+    [Ignore("Ignore old parser tests")]
     internal class FollowTests
     {
         [TestCase]
