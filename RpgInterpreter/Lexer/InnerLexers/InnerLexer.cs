@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using RpgInterpreter.Lexer.Sources;
-using RpgInterpreter.Tokens;
+using RpgInterpreter.Lexer.Tokens;
 
 namespace RpgInterpreter.Lexer.InnerLexers;
 

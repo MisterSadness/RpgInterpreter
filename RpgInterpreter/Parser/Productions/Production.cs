@@ -1,6 +1,6 @@
-﻿using RpgInterpreter.NonTerminals;
+﻿using RpgInterpreter.Lexer.Tokens;
+using RpgInterpreter.NonTerminals;
 using RpgInterpreter.Parser;
-using RpgInterpreter.Tokens;
 
 namespace RpgInterpreter.Productions;
 
@@ -273,7 +273,7 @@ public record Value_ObjectCreation() : Production<Value>(new Symbol[]
 
 public record Assignment() : Production<NonTerminals.Assignment>(new Symbol[]
 {
-    new Terminal<Set>(), new Name(), new Terminal<Tokens.Assignment>(), new NonTerminals.Expression()
+    new Terminal<Set>(), new Name(), new Terminal<Lexer.Tokens.Assignment>(), new NonTerminals.Expression()
 });
 
 public record Name_Id() : Production<Name>(new Symbol[]
@@ -321,7 +321,7 @@ public record ListInnerCont_List() : Production<ListInnerCont>(new Symbol[]
 
 public record If() : Production<NonTerminals.If>(new Symbol[]
 {
-    new Terminal<Tokens.If>(), new NonTerminals.Expression(), new Terminal<Then>(),
+    new Terminal<Lexer.Tokens.If>(), new NonTerminals.Expression(), new Terminal<Then>(),
     new NonTerminals.Expression(), new Terminal<Else>(), new NonTerminals.Expression()
 });
 

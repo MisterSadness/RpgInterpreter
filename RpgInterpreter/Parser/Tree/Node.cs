@@ -1,5 +1,5 @@
-﻿using RpgInterpreter.Parser;
-using RpgInterpreter.Tokens;
+﻿using RpgInterpreter.Lexer.Tokens;
+using RpgInterpreter.Parser;
 
 namespace RpgInterpreter.Tree;
 

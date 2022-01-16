@@ -1,7 +1,7 @@
 ﻿using Optional.Collections;
+using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.NonTerminals;
 using RpgInterpreter.Productions;
-using RpgInterpreter.Tokens;
 using RpgInterpreter.Utils;
 
 namespace RpgInterpreter.Parser;

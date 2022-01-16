@@ -1,4 +1,4 @@
-﻿namespace RpgInterpreter.Tokens;
+﻿namespace RpgInterpreter.Lexer.Tokens;
 
 public abstract record Operator : Token;
 

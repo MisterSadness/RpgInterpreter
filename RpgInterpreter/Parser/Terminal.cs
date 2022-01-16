@@ -1,4 +1,4 @@
-﻿using RpgInterpreter.Tokens;
+﻿using RpgInterpreter.Lexer.Tokens;
 
 namespace RpgInterpreter.Parser;
 

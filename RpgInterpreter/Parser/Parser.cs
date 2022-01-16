@@ -1,7 +1,7 @@
 ﻿using RpgInterpreter.Lexer.Sources;
+using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.NonTerminals;
 using RpgInterpreter.Productions;
-using RpgInterpreter.Tokens;
 using RpgInterpreter.Tree;
 using RpgInterpreter.Utils;
 
@@ -101,7 +101,12 @@ public class Parser
     }
 }
 
-public class ParsingException : Exception { }
+public class ParsingException : Exception
+{
+    public ParsingException(string message) : base(message)
+    {
+    }
+}
 
 public class UnexpectedTokenException : Exception
 {
