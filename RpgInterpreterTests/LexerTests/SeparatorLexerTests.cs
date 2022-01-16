@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RpgInterpreter.Lexer;
 using RpgInterpreter.Lexer.InnerLexers;
-using RpgInterpreter.Tokens;
+using RpgInterpreter.Lexer.Tokens;
 
 namespace RpgInterpreterTests.LexerTests;
 

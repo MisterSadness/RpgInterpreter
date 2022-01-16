@@ -3,7 +3,7 @@ using Optional;
 using RpgInterpreter.Lexer;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
-using RpgInterpreter.Tokens;
+using RpgInterpreter.Lexer.Tokens;
 
 namespace RpgInterpreterTests.LexerTests;
 
