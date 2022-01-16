@@ -15,18 +15,17 @@ fun fight(e1: Entity, e2: Entity) {
     set r1 = 1d100() - e1.Strength / 10;
     set r2 = 1d100() - e2.Strength / 10;
     set result = r1 - r2;
-    set looser = if (result > 0)
+    set loser = if (result > 0)
         then e2
         else e1;
     set winner = if (result > 0)
         then e1
         else e2;
-    set looser.Health = looser.Health - result;
-    print(looser.Name ++ " lost " ++ result ++ " health.");
-    if (looser.Health <= 0)
+    set loser.Health = loser.Health - result;
+    print(loser.Name ++ " lost " ++ result ++ " health.");
+    if (loser.Health <= 0)
         then {
-            print(looser.Name ++ " has died!");
-            delete(looser);
+            print(loser.Name ++ " has died!");
             print(winner.Name ++ " has won!");
             set return = winner;
         }
