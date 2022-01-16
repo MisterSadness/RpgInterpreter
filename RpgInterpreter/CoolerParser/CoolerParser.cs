@@ -1,7 +1,8 @@
 ﻿using System.Collections.Immutable;
 using RpgInterpreter.CoolerParser.Grammar;
+using RpgInterpreter.CoolerParser.ParsingFunctions;
+using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.Parser;
-using RpgInterpreter.Tokens;
 
 namespace RpgInterpreter.CoolerParser
 {
@@ -17,7 +18,7 @@ namespace RpgInterpreter.CoolerParser
 
             if (!parsingResult.Source.Queue.IsEmpty)
             {
-                throw new ParsingException();
+                throw new ParsingException("Unexpected tokens at the end of file.");
             }
 
             return parsingResult.Result;

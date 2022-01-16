@@ -1,13 +1,11 @@
-﻿using RpgInterpreter.Tokens;
+﻿namespace RpgInterpreter.CoolerParser.Grammar;
 
-namespace RpgInterpreter.CoolerParser.Grammar;
+public record Root(NodeList<Statement> Statements);
 
-public record Root(IEnumerable<Statement> Statements);
+public record FieldDeclaration(string Name, Expression Value);
 
-public record FieldDeclaration(UppercaseIdentifier Name, Expression Value);
+public record FieldList(NodeList<FieldDeclaration> Fields);
 
-public record FieldList(IEnumerable<FieldDeclaration> Fields);
+public record FunctionParameterList(NodeList<FunctionParameter> Parameters);
 
-public record FunctionParameterList(IEnumerable<FunctionParameter> Parameters);
-
-public record FunctionParameter(LowercaseIdentifier Name, UppercaseIdentifier Type);
+public record FunctionParameter(string Name, string Type);
