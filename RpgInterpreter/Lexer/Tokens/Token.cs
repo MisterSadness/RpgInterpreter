@@ -17,3 +17,5 @@ public record BooleanLiteral(bool Value) : Token;
 public record StringLiteral(string Value) : Token;
 
 public record EndOfInput : Token;
+
+public record LexingFinished : Token;

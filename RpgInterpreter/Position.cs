@@ -1,4 +1,4 @@
-﻿namespace RpgInterpreter.Lexer.Sources;
+﻿namespace RpgInterpreter;
 
 public record Position(int Line, int Column)
 {

@@ -23,5 +23,6 @@ public class Lexer
         }
 
         yield return new EndOfInput();
+        yield return new LexingFinished();
     }
 }

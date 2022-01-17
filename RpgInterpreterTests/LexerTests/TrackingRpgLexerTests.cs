@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using RpgInterpreter;
 using RpgInterpreter.Lexer;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
