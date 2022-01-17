@@ -1,11 +1,10 @@
 ﻿using RpgInterpreter.CoolerParser.Grammar;
+using RpgInterpreter.CoolerParser.ParsingExceptions;
 using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreter.Parser;
-using RpgInterpreter.Utils;
 
 namespace RpgInterpreter.CoolerParser.ParsingFunctions;
 
-public partial record SourceState
+public partial class SourceState
 {
     private Precedence GetPrecedence(Operator op)
     {
@@ -22,6 +21,7 @@ public partial record SourceState
 
     public IParseResult<BinaryOperation>? ParseBinaryOperation(Expression left, Precedence currentPrecedence)
     {
+        var start = left.Start;
         // 2 * 2 - 4
         // prec(*) > prec(-)
         // stop after 2 * 2
@@ -30,7 +30,7 @@ public partial record SourceState
         // 2 - 2 * 4
         // prec(-) <= prec(*)
         // continue
-        IParseResult<Operator>? operatorState = Queue.PeekOrDefault() switch
+        IParseResult<Operator>? operatorState = PeekOrDefault() switch
         {
             Multiplication => ParseToken<Multiplication>(),
             Division => ParseToken<Division>(),
@@ -61,22 +61,23 @@ public partial record SourceState
 
         var rightState = operatorState.Source.ParseExpression(newPrecedence);
         var right = rightState.Result;
+        var end = rightState.Source.CurrentPosition;
 
         BinaryOperation binOp = operatorState.Result switch
         {
-            Addition => new AdditionExp(left, right),
-            Minus => new SubtractionExp(left, right),
-            Multiplication => new MultiplicationExp(left, right),
-            Division => new DivisionExp(left, right),
-            BooleanAnd => new BooleanAndExp(left, right),
-            BooleanOr => new BooleanOrExp(left, right),
-            Concatenation => new ConcatenationExp(left, right),
-            Equality => new EqualExp(left, right),
-            Inequality => new NotEqualExp(left, right),
-            Less => new LessThanExp(left, right),
-            Greater => new GreaterThanExp(left, right),
-            LessOrEqual => new LessOrEqualThanExp(left, right),
-            GreaterOrEqual => new GreaterOrEqualThanExp(left, right),
+            Addition => new AdditionExp(left, right, start, end),
+            Minus => new SubtractionExp(left, right, start, end),
+            Multiplication => new MultiplicationExp(left, right, start, end),
+            Division => new DivisionExp(left, right, start, end),
+            BooleanAnd => new BooleanAndExp(left, right, start, end),
+            BooleanOr => new BooleanOrExp(left, right, start, end),
+            Concatenation => new ConcatenationExp(left, right, start, end),
+            Equality => new EqualExp(left, right, start, end),
+            Inequality => new NotEqualExp(left, right, start, end),
+            Less => new LessThanExp(left, right, start, end),
+            Greater => new GreaterThanExp(left, right, start, end),
+            LessOrEqual => new LessOrEqualThanExp(left, right, start, end),
+            GreaterOrEqual => new GreaterOrEqualThanExp(left, right, start, end),
             _ => throw new ParsingException($"Invalid operator {operatorState.Result.GetType().Name}")
         };
 

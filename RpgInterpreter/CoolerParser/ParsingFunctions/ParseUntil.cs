@@ -1,10 +1,9 @@
-﻿using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreter.Parser;
-using RpgInterpreter.Utils;
+﻿using RpgInterpreter.CoolerParser.ParsingExceptions;
+using RpgInterpreter.Lexer.Tokens;
 
 namespace RpgInterpreter.CoolerParser.ParsingFunctions;
 
-public partial record SourceState
+public partial class SourceState
 {
     public ParseResult<IEnumerable<TElement>> ParseSeparated<TElement, TSeparator, TEnd>(
         Func<SourceState, IParseResult<TElement>> parseElement)
@@ -18,7 +17,7 @@ public partial record SourceState
             var element = parseElement(state);
             state = element.Source;
             elements.Add(element.Result);
-            switch (state.Queue.PeekOrDefault())
+            switch (state.PeekOrDefault())
             {
                 case TSeparator:
                     var afterSeparator = state.ParseToken<TSeparator>();
@@ -28,8 +27,8 @@ public partial record SourceState
                     var remaining = state.ParseToken<TEnd>().Source;
                     return new ParseResult<IEnumerable<TElement>>(remaining, elements);
                 default:
-                    throw new ParsingException(
-                        $"Expected {typeof(TSeparator).Name} separator or {typeof(TEnd).Name} terminator.");
+                    throw new ExpectedTokenNotFoundException<TSeparator, TEnd>(state.PeekOrDefault(),
+                        state.CurrentPosition);
             }
         }
     }
@@ -41,7 +40,7 @@ public partial record SourceState
         var elements = new List<TElement>();
         var state = this;
 
-        while (state.Queue.PeekOrDefault() is not TEnd)
+        while (state.PeekOrDefault() is not TEnd)
         {
             var element = parseElement(state);
             state = element.Source;

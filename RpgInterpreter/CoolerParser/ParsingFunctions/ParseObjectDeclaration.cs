@@ -1,20 +1,20 @@
 ﻿using RpgInterpreter.CoolerParser.Grammar;
 using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreter.Utils;
 
 namespace RpgInterpreter.CoolerParser.ParsingFunctions;
 
-public partial record SourceState
+public partial class SourceState
 {
     public IParseResult<ObjectDeclaration> ParseObjectDeclaration()
     {
+        var start = CurrentPosition;
         var name = ParseToken<UppercaseIdentifier>();
 
         var sourceState = name.Source;
         UppercaseIdentifier? baseName = null;
         TraitList? traitList = null;
 
-        if (sourceState.Queue.PeekOrDefault() is Extends)
+        if (sourceState.PeekOrDefault() is Extends)
         {
             var extends = name.Source.ParseToken<Extends>();
 
@@ -24,7 +24,7 @@ public partial record SourceState
             baseName = baseState.Result;
         }
 
-        if (sourceState.Queue.PeekOrDefault() is With)
+        if (sourceState.PeekOrDefault() is With)
         {
             var traits = sourceState.ParseTraits();
 
@@ -33,12 +33,14 @@ public partial record SourceState
         }
 
         var fieldsState = sourceState.ParseFields();
+        var end = fieldsState.Source.CurrentPosition;
 
         return fieldsState.WithValue(new ObjectDeclaration(
             name.Result.Identifier,
             baseName?.Identifier,
             traitList,
-            fieldsState.Result
+            fieldsState.Result,
+            start, end
         ));
     }
 }

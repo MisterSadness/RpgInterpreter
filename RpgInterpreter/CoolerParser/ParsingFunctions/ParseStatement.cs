@@ -1,15 +1,14 @@
 ﻿using RpgInterpreter.CoolerParser.Grammar;
+using RpgInterpreter.CoolerParser.ParsingExceptions;
 using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreter.Parser;
-using RpgInterpreter.Utils;
 
 namespace RpgInterpreter.CoolerParser.ParsingFunctions;
 
-public partial record SourceState
+public partial class SourceState
 {
     public IParseResult<Statement> ParseStatement()
     {
-        return Queue.PeekOrDefault() switch
+        return PeekOrDefault() switch
         {
             UppercaseIdentifier => ParseObjectDeclaration(),
             Trait => ParseTraitDeclaration(),

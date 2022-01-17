@@ -1,18 +1,23 @@
-﻿namespace RpgInterpreter.CoolerParser.Grammar;
+﻿using RpgInterpreter.Lexer.Sources;
 
-public abstract record Statement;
+namespace RpgInterpreter.CoolerParser.Grammar;
+
+public abstract record Statement(Position Start, Position End) : Node(Start, End);
 
 public interface IBlockInner { }
 
 public record ObjectDeclaration(string Name, string? Base, TraitList? Traits,
-        FieldList Fields)
-    : Statement;
+        FieldList Fields, Position Start, Position End)
+    : Statement(Start, End);
 
-public record TraitDeclaration(string Name, string? Base, FieldList Fields) : Statement;
+public record TraitDeclaration
+    (string Name, string? Base, FieldList Fields, Position Start, Position End) : Statement(Start, End);
 
-public record Assignment(IAssignable Target, Expression Value) : Statement, IBlockInner;
+public record Assignment(IAssignable Target, Expression Value, Position Start, Position End) : Statement(Start, End),
+    IBlockInner;
 
-public record FunctionInvocationStatement(FunctionInvocation FunctionInvocation) : Statement;
+public record FunctionInvocationStatement
+    (FunctionInvocation FunctionInvocation, Position Start, Position End) : Statement(Start, End);
 
 public record FunctionDeclaration(string Name, FunctionParameterList ParameterList,
-    string ReturnType, Block Body) : Statement;
+    string ReturnType, Block Body, Position Start, Position End) : Statement(Start, End);

@@ -1,10 +1,8 @@
 ﻿using NUnit.Framework;
 using RpgInterpreter.CoolerParser.Grammar;
 using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreterTests.CoolerParserTests.Extensions;
-using Assignment = RpgInterpreter.CoolerParser.Grammar.Assignment;
+using RpgInterpreterTests.CoolerParserTests.Utils;
 using AssignmentToken = RpgInterpreter.Lexer.Tokens.Assignment;
-using If = RpgInterpreter.CoolerParser.Grammar.If;
 using IfToken = RpgInterpreter.Lexer.Tokens.If;
 
 namespace RpgInterpreterTests.CoolerParserTests;
@@ -59,41 +57,45 @@ internal class ProgramTests
                 new AssignmentToken(),
                 new LowercaseIdentifier("loser"), new Access(), new UppercaseIdentifier("Health"), new Minus(),
                 new LowercaseIdentifier("result"), new Semicolon(),
-                new CloseBrace(), new Semicolon(), new EndOfInput()
+                new CloseBrace(), new Semicolon(), new EndOfInput(), new LexingFinished()
             },
-            new Root(NodeList.From(new Statement[]
+            AstFactory.Root(NodeList.From(new Statement[]
             {
-                new FunctionDeclaration(
+                AstFactory.FunctionDeclaration(
                     "fight",
-                    new FunctionParameterList(NodeList.From(new FunctionParameter[]
-                        { new("e1", "Entity"), new("e2", "Entity") })),
-                    "Unit",
-                    new Block(NodeList.From(new IBlockInner[]
+                    AstFactory.FunctionParameterList(NodeList.From(new[]
                     {
-                        new Assignment(new Variable("r1"), new SubtractionExp(
-                            new DiceRoll(new Dice(1, 100)),
-                            new DivisionExp(new FieldReference(new Variable("e1"), "Strength"), new Natural(10))
+                        AstFactory.FunctionParameter("e1", "Entity"), AstFactory.FunctionParameter("e2", "Entity")
+                    })),
+                    "Unit",
+                    AstFactory.Block(NodeList.From(new IBlockInner[]
+                    {
+                        AstFactory.Assignment(AstFactory.Variable("r1"), AstFactory.SubtractionExp(
+                            AstFactory.DiceRoll(AstFactory.Dice(1, 100)),
+                            AstFactory.DivisionExp(AstFactory.FieldReference(AstFactory.Variable("e1"), "Strength"),
+                                AstFactory.Natural(10))
                         )),
-                        new Assignment(new Variable("r2"), new SubtractionExp(
-                            new DiceRoll(new Dice(1, 100)),
-                            new DivisionExp(new FieldReference(new Variable("e2"), "Strength"), new Natural(10))
+                        AstFactory.Assignment(AstFactory.Variable("r2"), AstFactory.SubtractionExp(
+                            AstFactory.DiceRoll(AstFactory.Dice(1, 100)),
+                            AstFactory.DivisionExp(AstFactory.FieldReference(AstFactory.Variable("e2"), "Strength"),
+                                AstFactory.Natural(10))
                         )),
-                        new Assignment(new Variable("result"),
-                            new SubtractionExp(new Variable("r1"), new Variable("r2"))),
-                        new Assignment(new Variable("loser"), new If(
-                            new GreaterThanExp(new Variable("result"), new Natural(0)),
-                            new Variable("e2"),
-                            new Variable("e1"))),
-                        new Assignment(new Variable("winner"), new If(
-                            new GreaterThanExp(new Variable("result"), new Natural(0)),
-                            new Variable("e1"),
-                            new Variable("e2"))),
-                        new Assignment(
-                            new FieldReference(new Variable("loser"), "Health"),
-                            new SubtractionExp(new FieldReference(new Variable("loser"), "Health"),
-                                new Variable("result"))
+                        AstFactory.Assignment(AstFactory.Variable("result"),
+                            AstFactory.SubtractionExp(AstFactory.Variable("r1"), AstFactory.Variable("r2"))),
+                        AstFactory.Assignment(AstFactory.Variable("loser"), AstFactory.If(
+                            AstFactory.GreaterThanExp(AstFactory.Variable("result"), AstFactory.Natural(0)),
+                            AstFactory.Variable("e2"),
+                            AstFactory.Variable("e1"))),
+                        AstFactory.Assignment(AstFactory.Variable("winner"), AstFactory.If(
+                            AstFactory.GreaterThanExp(AstFactory.Variable("result"), AstFactory.Natural(0)),
+                            AstFactory.Variable("e1"),
+                            AstFactory.Variable("e2"))),
+                        AstFactory.Assignment(
+                            AstFactory.FieldReference(AstFactory.Variable("loser"), "Health"),
+                            AstFactory.SubtractionExp(AstFactory.FieldReference(AstFactory.Variable("loser"), "Health"),
+                                AstFactory.Variable("result"))
                         )
-                    }), new Unit()))
+                    }), AstFactory.Unit()))
             }))
         )
     };
@@ -105,7 +107,7 @@ internal class ProgramTests
 
         var parsed = source.ParseProgram();
 
-        Assert.IsEmpty(parsed.Source.Queue);
+        Assert.That(parsed.Source.PeekOrDefault(), Is.TypeOf<LexingFinished>());
         Assert.AreEqual(data.ExpectedTree, parsed.Result);
     }
 }

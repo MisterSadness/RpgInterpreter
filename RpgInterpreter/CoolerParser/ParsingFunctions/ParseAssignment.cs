@@ -1,14 +1,15 @@
 ﻿using RpgInterpreter.CoolerParser.Grammar;
+using RpgInterpreter.CoolerParser.ParsingExceptions;
 using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreter.Parser;
 using Assignment = RpgInterpreter.CoolerParser.Grammar.Assignment;
 
 namespace RpgInterpreter.CoolerParser.ParsingFunctions;
 
-public partial record SourceState
+public partial class SourceState
 {
     public IParseResult<Assignment> ParseAssignment()
     {
+        var start = CurrentPosition;
         var keywordState = ParseToken<Set>();
 
         var nameState = keywordState.Source.ParseReference();
@@ -24,7 +25,8 @@ public partial record SourceState
         var valueState = equalSignState.Source.ParseExpression();
         var value = valueState.Result;
 
-        var assignment = new Assignment(assignable, value);
+        var end = valueState.Source.CurrentPosition;
+        var assignment = new Assignment(assignable, value, start, end);
         return valueState.WithValue(assignment);
     }
 }

@@ -11,7 +11,7 @@ internal class RpgLexerTests
 {
     private static ListTestData[] _exactTokens =
     {
-        new("", new Token[] { new EndOfInput() }),
+        new("", new Token[] { new EndOfInput(), new LexingFinished() }),
         new(
             "if ((42 * 3d3) == 12) then \"else\" else { bar([1d4, 1d4, 1d2], [], [[], [1], [1, 2]]) + -42 - --7 * \"abc\" / 1d4 }",
             new Token[]
@@ -31,7 +31,7 @@ internal class RpgLexerTests
                 new CloseBracket(), new CloseParen(), new Addition(), new Minus(), new NaturalLiteral(42),
                 new Minus(), new Minus(), new Minus(),
                 new NaturalLiteral(7), new Multiplication(), new StringLiteral("abc"), new Division(),
-                new DiceLiteral(1, 4), new CloseBrace(), new EndOfInput()
+                new DiceLiteral(1, 4), new CloseBrace(), new EndOfInput(), new LexingFinished()
             }),
         new(
             "if (100 > 9999())\nthen 2/0\nelse true",
@@ -40,7 +40,7 @@ internal class RpgLexerTests
                 new If(), new OpenParen(), new NaturalLiteral(100), new Greater(), new NaturalLiteral(9999),
                 new OpenParen(), new CloseParen(),
                 new CloseParen(), new Then(), new NaturalLiteral(2), new Division(), new NaturalLiteral(0),
-                new Else(), new BooleanLiteral(true), new EndOfInput()
+                new Else(), new BooleanLiteral(true), new EndOfInput(), new LexingFinished()
             }
         )
     };

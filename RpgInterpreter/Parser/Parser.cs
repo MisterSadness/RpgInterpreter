@@ -71,7 +71,7 @@ public class Parser
 
         if (!option.HasValue)
         {
-            throw new UnexpectedTokenException(right);
+            throw new ObsoleteUnexpectedTokenException(right);
         }
 
         option.MatchSome(production =>
@@ -91,7 +91,7 @@ public class Parser
     {
         if (left.TokenType != right.Value.GetType())
         {
-            throw new ExpectedTokenNotFoundException(left, right);
+            throw new ObsoleteExpectedTokenNotFoundException(left, right);
         }
 
         _stack.Pop();
@@ -101,21 +101,20 @@ public class Parser
     }
 }
 
-public class ParsingException : Exception
+public class ObsoleteParsingException : Exception
 {
-    public ParsingException(string message) : base(message)
-    {
+    public ObsoleteParsingException(string message) : base(message) {
     }
 }
 
-public class UnexpectedTokenException : Exception
+public class ObsoleteUnexpectedTokenException : Exception
 {
-    public UnexpectedTokenException(PositionedToken unexpected) : base(
+    public ObsoleteUnexpectedTokenException(PositionedToken unexpected) : base(
         $"An unexpected token {unexpected.Value} found at position {unexpected.Start.Formatted}.") { }
 }
 
-public class ExpectedTokenNotFoundException : Exception
+public class ObsoleteExpectedTokenNotFoundException : Exception
 {
-    public ExpectedTokenNotFoundException(Terminal expected, PositionedToken actual) : base(
+    public ObsoleteExpectedTokenNotFoundException(Terminal expected, PositionedToken actual) : base(
         $"Expected to find {expected} but found {actual.Value} at position {actual.Start.Formatted}.") { }
 }

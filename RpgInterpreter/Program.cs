@@ -23,11 +23,11 @@ if (args.Length == 1 && File.Exists(args[0]))
     {
         Console.WriteLine($"Lexing failed with: {e}");
     }
-    catch (UnexpectedTokenException e)
+    catch (ObsoleteUnexpectedTokenException e)
     {
         Console.WriteLine(e.Message);
     }
-    catch (ExpectedTokenNotFoundException e)
+    catch (ObsoleteExpectedTokenNotFoundException e)
     {
         Console.WriteLine(e.Message);
     }

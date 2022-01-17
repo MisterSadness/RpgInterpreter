@@ -1,9 +1,7 @@
-﻿using System.Collections.Immutable;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using RpgInterpreter.CoolerParser.Grammar;
-using RpgInterpreter.CoolerParser.ParsingFunctions;
 using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreterTests.CoolerParserTests.Extensions;
+using RpgInterpreterTests.CoolerParserTests.Utils;
 
 namespace RpgInterpreterTests.CoolerParserTests
 {
@@ -16,23 +14,27 @@ namespace RpgInterpreterTests.CoolerParserTests
             new TestData(new Token[]
                 {
                     new NaturalLiteral(1), new Addition(), new NaturalLiteral(2), new Multiplication(),
-                    new NaturalLiteral(3)
+                    new NaturalLiteral(3), new LexingFinished()
                 },
-                new AdditionExp(new Natural(1), new MultiplicationExp(new Natural(2), new Natural(3)))
+                AstFactory.AdditionExp(AstFactory.Natural(1),
+                    AstFactory.MultiplicationExp(AstFactory.Natural(2), AstFactory.Natural(3)))
             ),
             new TestData(new Token[]
                 {
                     new NaturalLiteral(1), new Multiplication(), new NaturalLiteral(2), new Addition(),
-                    new NaturalLiteral(3)
+                    new NaturalLiteral(3), new LexingFinished()
                 },
-                new AdditionExp(new MultiplicationExp(new Natural(1), new Natural(2)), new Natural(3))
+                AstFactory.AdditionExp(AstFactory.MultiplicationExp(AstFactory.Natural(1), AstFactory.Natural(2)),
+                    AstFactory.Natural(3))
             ),
             new TestData(new Token[]
                 {
                     new NaturalLiteral(1), new Multiplication(), new Minus(), new NaturalLiteral(2), new Addition(),
-                    new NaturalLiteral(3)
+                    new NaturalLiteral(3), new LexingFinished()
                 },
-                new AdditionExp(new MultiplicationExp(new Natural(1), new UnaryMinus(new Natural(2))), new Natural(3))
+                AstFactory.AdditionExp(
+                    AstFactory.MultiplicationExp(AstFactory.Natural(1), AstFactory.UnaryMinus(AstFactory.Natural(2))),
+                    AstFactory.Natural(3))
             )
         };
 
@@ -43,24 +45,24 @@ namespace RpgInterpreterTests.CoolerParserTests
 
             var result = sourceState.ParseExpression();
 
-            Assert.That(result.Source.Queue.IsEmpty);
+            Assert.That(result.Source.PeekOrDefault(), Is.TypeOf<LexingFinished>());
             Assert.That(result.Result, Is.EqualTo(data.Expected));
         }
 
         private static IEnumerable<IEnumerable<Token>> _additionData = new[]
         {
-            new Token[] { new NaturalLiteral(3), new Addition(), new NaturalLiteral(4) }
+            new Token[] { new NaturalLiteral(3), new Addition(), new NaturalLiteral(4), new LexingFinished() }
         };
 
         [TestCaseSource(nameof(_additionData))]
         public void Addition(IEnumerable<Token> source)
         {
-            var sourceState = new SourceState(ImmutableQueue.CreateRange(source));
+            var sourceState = source.ToSourceState();
 
             var result = sourceState.ParseExpression();
 
             Assert.That(result.Result, Is.TypeOf<AdditionExp>());
-            Assert.That(result.Source.Queue.IsEmpty);
+            Assert.That(result.Source.PeekOrDefault(), Is.TypeOf<LexingFinished>());
         }
     }
 }

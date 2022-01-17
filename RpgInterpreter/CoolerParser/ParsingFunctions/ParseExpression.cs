@@ -1,18 +1,17 @@
 ﻿using RpgInterpreter.CoolerParser.Grammar;
+using RpgInterpreter.CoolerParser.ParsingExceptions;
 using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreter.Parser;
-using RpgInterpreter.Utils;
 using Base = RpgInterpreter.Lexer.Tokens.Base;
 using If = RpgInterpreter.Lexer.Tokens.If;
 using This = RpgInterpreter.Lexer.Tokens.This;
 
 namespace RpgInterpreter.CoolerParser.ParsingFunctions;
 
-public partial record SourceState
+public partial class SourceState
 {
     public IParseResult<Expression> ParseExpression(Precedence currentPrecedence = Precedence.None)
     {
-        var parsedExpression = Queue.PeekOrDefault() switch
+        var parsedExpression = PeekOrDefault() switch
         {
             OpenBracket => ParseList(),
             NaturalLiteral => ParseNatural(),
@@ -29,7 +28,7 @@ public partial record SourceState
             _ => throw new ParsingException("Expected expression.")
         };
 
-        if (parsedExpression.Source.Queue.PeekOrDefault() is OpenParen)
+        if (parsedExpression.Source.PeekOrDefault() is OpenParen)
         {
             parsedExpression = parsedExpression.Source.ParseRoll(parsedExpression.Result);
         }
@@ -45,7 +44,7 @@ public partial record SourceState
             {
                 parsedExpression = parsedOperation;
             }
-        } while (parsedExpression.Source.Queue.PeekOrDefault() is Operator && parsedOperation != null);
+        } while (parsedExpression.Source.PeekOrDefault() is Operator && parsedOperation != null);
 
         return parsedExpression;
     }

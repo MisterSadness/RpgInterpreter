@@ -24,16 +24,18 @@ internal class SeparatorLexerTests
     {
         new("()(((", new Token[]
         {
-            new OpenParen(), new CloseParen(), new OpenParen(), new OpenParen(), new OpenParen(), new EndOfInput()
+            new OpenParen(), new CloseParen(), new OpenParen(), new OpenParen(), new OpenParen(), new EndOfInput(),
+            new LexingFinished()
         }),
         new(")[}{;", new Token[]
         {
-            new CloseParen(), new OpenBracket(), new CloseBrace(), new OpenBrace(), new Semicolon(), new EndOfInput()
+            new CloseParen(), new OpenBracket(), new CloseBrace(), new OpenBrace(), new Semicolon(), new EndOfInput(),
+            new LexingFinished()
         }),
         new("][::][", new Token[]
         {
             new CloseBracket(), new OpenBracket(), new Colon(), new Colon(), new CloseBracket(), new OpenBracket(),
-            new EndOfInput()
+            new EndOfInput(), new LexingFinished()
         })
     };
 

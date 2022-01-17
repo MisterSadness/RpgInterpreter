@@ -1,20 +1,20 @@
-﻿using RpgInterpreter.Lexer.Tokens;
-using RpgInterpreter.Parser;
+﻿using RpgInterpreter.CoolerParser.ParsingExceptions;
+using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.Utils;
 
 namespace RpgInterpreter.CoolerParser.ParsingFunctions;
 
-public partial record SourceState
+public partial class SourceState
 {
     public IParseResult<TToken> ParseToken<TToken>() where TToken : Token
     {
-        var topToken = Queue.FirstOrDefault();
+        var topToken = PeekOrDefault();
 
         if (topToken is TToken token)
         {
             return new ParseResult<TToken>(Queue.Dequeue().ToState(), token);
         }
 
-        throw new ParsingException($"Expected token {typeof(TToken).Name}");
+        throw new ExpectedTokenNotFoundException<TToken>(topToken, CurrentPosition);
     }
 }
