@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
-using RpgInterpreter.CoolerParser.ParsingFunctions;
 using RpgInterpreter.Lexer.Tokens;
+using RpgInterpreter.Parser.ParsingFunctions;
 
 namespace RpgInterpreter.Utils;
 
