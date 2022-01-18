@@ -10,9 +10,18 @@ public partial class SourceState
         var start = CurrentPosition;
         var keyword = ParseToken<New>();
         var className = keyword.Source.ParseToken<UppercaseIdentifier>();
-        var traits = className.Source.ParseTraits();
-        var end = traits.Source.CurrentPosition;
+        var afterTraits = className.Source;
+        TraitList? traits = null;
+        if (className.Source.PeekOrDefault() is With)
+        {
+            var parsedTraits = className.Source.ParseTraits();
+            afterTraits = parsedTraits.Source;
+            traits = parsedTraits.Result;
+        }
 
-        return traits.WithValue(new ObjectCreation(className.Result.Identifier, traits.Result, start, end));
+        var end = afterTraits.CurrentPosition;
+
+        return new ParseResult<ObjectCreation>(afterTraits,
+            new ObjectCreation(className.Result.Identifier, traits, start, end));
     }
 }

@@ -15,7 +15,7 @@ public partial class SourceState
 
         var inner = open.Source.ParseTerminated<IBlockInner, Semicolon, CloseBrace>(s => s.ParseBlockInner());
         var innerList = inner.Result.ToList();
-        if (innerList.SkipLast(1).Any(x => x is not Assignment or If or FunctionInvocation))
+        if (innerList.SkipLast(1).Any(x => x is not Assignment and not If and not FunctionInvocation))
         {
             throw new ParsingException("Invalid block with an expression outside of last position.");
         }

@@ -11,7 +11,7 @@ trait Strong for Entity {
     Strength: base.Strength + 103
 };
 
-fun fight(e1: Entity, e2: Entity) {
+fun fight(e1: Entity, e2: Entity) Unit {
     set r1 = 1d100() - e1.Strength / 10;
     set r2 = 1d100() - e2.Strength / 10;
     set result = r1 - r2;

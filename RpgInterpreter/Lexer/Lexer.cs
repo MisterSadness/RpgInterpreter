@@ -22,7 +22,7 @@ public class Lexer
             var matched = possible.Match(source);
             if (matched is not Whitespace)
             {
-                yield return possible.Match(source);
+                yield return matched;
             }
 
             c = source.Peek();

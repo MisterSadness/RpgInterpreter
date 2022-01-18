@@ -12,6 +12,12 @@ public partial class SourceState
         var elements = new List<TElement>();
         var state = this;
 
+        if (PeekOrDefault() is TEnd)
+        {
+            var parsedEnd = ParseToken<TEnd>();
+            return new ParseResult<IEnumerable<TElement>>(parsedEnd.Source, elements);
+        }
+
         while (true)
         {
             var element = parseElement(state);

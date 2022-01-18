@@ -24,7 +24,7 @@ public record If
 public record Block
     (NodeList<IBlockInner> Inner, Expression Last, Position Start, Position End) : Expression(Start, End);
 
-public record ObjectCreation(string Type, TraitList Traits, Position Start, Position End) : Expression(Start, End);
+public record ObjectCreation(string Type, TraitList? Traits, Position Start, Position End) : Expression(Start, End);
 
 public record TraitList(NodeList<string> Traits, Position Start, Position End) : Expression(Start, End);
 

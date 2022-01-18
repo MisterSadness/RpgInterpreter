@@ -76,7 +76,7 @@ public partial class SourceState
     public IParseResult<Base> ParseBase()
     {
         var start = CurrentPosition;
-        var parsed = ParseToken<Lexer.Tokens.This>();
+        var parsed = ParseToken<Lexer.Tokens.Base>();
         var end = parsed.Source.CurrentPosition;
 
         return parsed.WithValue(new Base(start, end));
