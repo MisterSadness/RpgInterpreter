@@ -2,7 +2,7 @@
   "profiles": {
     "RpgInterpreter": {
       "commandName": "Project",
-      "commandLineArgs": "example2.rpg"
+      "commandLineArgs": "example.rpg"
     }
   }
 }
