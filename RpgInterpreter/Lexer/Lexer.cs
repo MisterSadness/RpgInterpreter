@@ -18,7 +18,13 @@ public class Lexer
         {
             var possible = _inner.SingleOrDefault(i => c.Exists(i.FirstCharacterMatches))
                            ?? throw new UnexpectedInputException();
-            yield return possible.Match(source);
+
+            var matched = possible.Match(source);
+            if (matched is not Whitespace)
+            {
+                yield return possible.Match(source);
+            }
+
             c = source.Peek();
         }
 
