@@ -28,7 +28,7 @@ public partial class SourceState
     {
         var start = CurrentPosition;
         var parsedOpen = ParseToken<OpenParen>();
-        var parsedParams = parsedOpen.Source.ParseSeparated<FunctionParameter, Comma, CloseParen>(
+        var parsedParams = parsedOpen.Source.ParseSeparated<FunctionParameterDeclaration, Comma, CloseParen>(
             s => s.ParseFunctionParameter()
         );
         var end = parsedParams.Source.CurrentPosition;
@@ -36,7 +36,7 @@ public partial class SourceState
         return parsedParams.WithValue(new FunctionParameterList(NodeList.From(parsedParams.Result), start, end));
     }
 
-    public IParseResult<FunctionParameter> ParseFunctionParameter()
+    public IParseResult<FunctionParameterDeclaration> ParseFunctionParameter()
     {
         var start = CurrentPosition;
         var parsedName = ParseToken<LowercaseIdentifier>();
@@ -44,7 +44,8 @@ public partial class SourceState
         var parsedType = parsedColon.Source.ParseToken<UppercaseIdentifier>();
         var end = parsedType.Source.CurrentPosition;
 
-        return parsedType.WithValue(new FunctionParameter(parsedName.Result.Identifier, parsedType.Result.Identifier,
+        return parsedType.WithValue(new FunctionParameterDeclaration(parsedName.Result.Identifier,
+            parsedType.Result.Identifier,
             start, end));
     }
 }

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.Parser.Grammar;
-using RpgInterpreterTests.ParserTests.Utils;
+using RpgInterpreterTests.Utils;
 
 namespace RpgInterpreterTests.ParserTests;
 
@@ -63,5 +63,37 @@ internal class BinaryOperationTests
 
         Assert.That(result.Result, Is.TypeOf<AdditionExp>());
         Assert.That(result.Source.PeekOrDefault(), Is.TypeOf<LexingFinished>());
+    }
+
+    private static IEnumerable<TestData> _parensData = new[]
+    {
+        new TestData(new Token[]
+            {
+                new OpenParen(), new NaturalLiteral(1), new Addition(), new NaturalLiteral(2), new CloseParen(),
+                new Multiplication(), new NaturalLiteral(3), new LexingFinished()
+            },
+            AstFactory.MultiplicationExp(AstFactory.AdditionExp(AstFactory.Natural(1), AstFactory.Natural(2)),
+                AstFactory.Natural(3))
+        ),
+        new TestData(new Token[]
+            {
+                new NaturalLiteral(1), new Multiplication(), new OpenParen(), new NaturalLiteral(2), new Addition(),
+                new NaturalLiteral(3), new CloseParen(), new LexingFinished()
+            },
+            AstFactory.MultiplicationExp(AstFactory.Natural(1),
+                AstFactory.AdditionExp(AstFactory.Natural(2), AstFactory.Natural(3))
+            )
+        )
+    };
+
+    [TestCaseSource(nameof(_parensData))]
+    public void OperationsWithParentheses(TestData data)
+    {
+        var sourceState = data.Input.ToSourceState();
+
+        var result = sourceState.ParseExpression();
+
+        Assert.That(result.Source.PeekOrDefault(), Is.TypeOf<LexingFinished>());
+        Assert.That(result.Result, Is.EqualTo(data.Expected));
     }
 }

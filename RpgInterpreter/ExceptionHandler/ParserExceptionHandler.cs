@@ -2,13 +2,14 @@
 
 namespace RpgInterpreter.ExceptionHandler;
 
-public class ParserExceptionHandler : IExceptionHandler
+public class ParserExceptionHandler : ExceptionHandler
 {
     private readonly ErrorAreaPrinter _errorAreaPrinter;
 
-    public ParserExceptionHandler(ErrorAreaPrinter errorAreaPrinter) => _errorAreaPrinter = errorAreaPrinter;
+    public ParserExceptionHandler(ErrorAreaPrinter errorAreaPrinter, IOutput output) : base(output) =>
+        _errorAreaPrinter = errorAreaPrinter;
 
-    public void RunAndHandle(Action action)
+    public override void RunAndHandle(Action action)
     {
         try
         {
@@ -16,13 +17,11 @@ public class ParserExceptionHandler : IExceptionHandler
         }
         catch (ParsingException e)
         {
-            Console.WriteLine("Parsing exception occurred:");
-            if (e is IPointPositionedException positioned)
+            Output.WriteLine($"Parsing exception occurred: {e.Message}");
+            if (e is IPositionedException positioned)
             {
-                Console.WriteLine(_errorAreaPrinter.FindErrorSurroundings(positioned));
+                Output.WriteLine(_errorAreaPrinter.FindErrorSurroundings(positioned));
             }
-
-            Console.WriteLine(e);
         }
     }
 }

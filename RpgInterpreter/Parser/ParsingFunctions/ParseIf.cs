@@ -1,14 +1,14 @@
 ﻿using RpgInterpreter.Lexer.Tokens;
-using If = RpgInterpreter.Parser.Grammar.If;
+using RpgInterpreter.Parser.Grammar;
 
 namespace RpgInterpreter.Parser.ParsingFunctions;
 
 public partial class SourceState
 {
-    public IParseResult<If> ParseIf()
+    public IParseResult<IfExpression> ParseIf()
     {
         var start = CurrentPosition;
-        var ifState = ParseToken<Lexer.Tokens.If>();
+        var ifState = ParseToken<If>();
         var condition = ifState.Source.ParseExpression();
         var then = condition.Source.ParseToken<Then>();
         var trueValue = then.Source.ParseExpression();
@@ -16,7 +16,7 @@ public partial class SourceState
         var falseValue = elseState.Source.ParseExpression();
         var end = falseValue.Source.CurrentPosition;
 
-        return falseValue.WithValue(new If(
+        return falseValue.WithValue(new IfExpression(
             condition.Result,
             trueValue.Result,
             falseValue.Result,

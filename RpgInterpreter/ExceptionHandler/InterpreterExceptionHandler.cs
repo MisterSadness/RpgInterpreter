@@ -1,14 +1,15 @@
-﻿using RpgInterpreter.Runtime;
+﻿using RpgInterpreter.Runtime.SemanticExceptions;
 
 namespace RpgInterpreter.ExceptionHandler;
 
-public class InterpreterExceptionHandler : IExceptionHandler
+public class InterpreterExceptionHandler : ExceptionHandler
 {
     private readonly ErrorAreaPrinter _errorAreaPrinter;
 
-    public InterpreterExceptionHandler(ErrorAreaPrinter errorAreaPrinter) => _errorAreaPrinter = errorAreaPrinter;
+    public InterpreterExceptionHandler(ErrorAreaPrinter errorAreaPrinter, IOutput output) : base(output) =>
+        _errorAreaPrinter = errorAreaPrinter;
 
-    public void RunAndHandle(Action action)
+    public override void RunAndHandle(Action action)
     {
         try
         {
@@ -16,13 +17,11 @@ public class InterpreterExceptionHandler : IExceptionHandler
         }
         catch (SemanticException e)
         {
-            Console.WriteLine("Semantic exception occurred:");
-            if (e is IPointPositionedException positioned)
+            Output.WriteLine($"Semantic exception occurred: {e.Message}");
+            if (e is IPositionedException positioned)
             {
-                Console.WriteLine(_errorAreaPrinter.FindErrorSurroundings(positioned));
+                Output.WriteLine(_errorAreaPrinter.FindErrorSurroundings(positioned));
             }
-
-            Console.WriteLine(e);
         }
     }
 }

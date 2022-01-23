@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.Parser.ParsingExceptions;
-using RpgInterpreterTests.ParserTests.Utils;
+using RpgInterpreterTests.Utils;
 
 namespace RpgInterpreterTests.ParserTests;
 

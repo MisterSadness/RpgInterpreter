@@ -1,11 +1,13 @@
 ﻿namespace RpgInterpreter.ExceptionHandler;
 
-public interface IPointPositionedException
+public interface IPositionedException { }
+
+public interface IPointPositionedException : IPositionedException
 {
     Position Position { get; }
 }
 
-public interface IIntervalPositionedException
+public interface IIntervalPositionedException : IPositionedException
 {
     Position Start { get; }
     Position End { get; }

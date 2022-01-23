@@ -5,7 +5,7 @@ namespace RpgInterpreter.Parser.ParsingFunctions;
 
 public partial class SourceState
 {
-    public IParseResult<List> ParseList()
+    public IParseResult<ListExp> ParseList()
     {
         var start = CurrentPosition;
         var openBracketState = ParseToken<OpenBracket>();
@@ -15,7 +15,7 @@ public partial class SourceState
         var elements = elementsState.Result;
         var end = elementsState.Source.CurrentPosition;
 
-        return elementsState.WithValue(new List(NodeList.From(elements), start, end));
+        return elementsState.WithValue(new ListExp(NodeList.From(elements), start, end));
     }
 
     public IParseResult<Natural> ParseNatural()
@@ -27,13 +27,13 @@ public partial class SourceState
         return parsed.WithValue(new Natural(parsed.Result.Value, start, end));
     }
 
-    public IParseResult<Dice> ParseDice()
+    public IParseResult<DiceExpression> ParseDice()
     {
         var start = CurrentPosition;
         var parsed = ParseToken<DiceLiteral>();
         var end = parsed.Source.CurrentPosition;
 
-        return parsed.WithValue(new Dice(parsed.Result.Count, parsed.Result.Max, start, end));
+        return parsed.WithValue(new DiceExpression(parsed.Result.Count, parsed.Result.Max, start, end));
     }
 
     public IParseResult<BooleanExpression> ParseBoolean()

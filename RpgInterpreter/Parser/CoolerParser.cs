@@ -8,13 +8,9 @@ namespace RpgInterpreter.Parser;
 
 public class CoolerParser
 {
-    public IEnumerable<PositionedToken> Source { get; }
-
-    public CoolerParser(IEnumerable<PositionedToken> source) => Source = source;
-
-    public Root Parse()
+    public Root Parse(IEnumerable<PositionedToken> source)
     {
-        var parsingResult = new SourceState(ImmutableQueue.CreateRange(Source)).ParseProgram();
+        var parsingResult = new SourceState(ImmutableQueue.CreateRange(source)).ParseProgram();
 
         var leftOver = parsingResult.Source.PeekPositionedOrDefault;
         if (leftOver is null)

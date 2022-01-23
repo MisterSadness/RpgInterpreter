@@ -8,10 +8,12 @@
 };
 
 trait Strong for Entity {
-    Strength: base.Strength + 103
+    Strength: base.Strength + 10
 };
 
-fun fight(e1: Entity, e2: Entity) Unit {
+fun fight(e1: Entity, e2: Entity) Entity {
+    print(e1.Name ++ " has " ++ getString(e1.Health) ++ " health\n");
+    print(e2.Name ++ " has " ++ getString(e2.Health) ++ " health\n");
     set r1 = 1d100() - e1.Strength / 10;
     set r2 = 1d100() - e2.Strength / 10;
     set result = r1 - r2;
@@ -22,22 +24,22 @@ fun fight(e1: Entity, e2: Entity) Unit {
         then e1
         else e2;
     set loser.Health = loser.Health - result;
-    print(loser.Name ++ " lost " ++ result ++ " health.");
+    print(loser.Name ++ " lost " ++ getString(result) ++ " health.\n");
     if (loser.Health <= 0)
         then {
-            print(loser.Name ++ " has died!");
-            print(winner.Name ++ " has won!");
-            set return = winner;
+            print(loser.Name ++ " has died!\n");
+            print(winner.Name ++ " has won!\n");
+            winner;
         }
         else {
-            print("Fight continues!");
+            print("Fight continues!\n");
             fight(e1, e2);
         };
 };
 
-set fighter = new Entity with Strong;
+set fighter = Entity with Strong;
 set fighter.Name = "Marcus";
-set bandit = new Entity;
+set bandit = Entity;
 set bandit.Name = "Otto";
 
 fight(fighter, bandit);

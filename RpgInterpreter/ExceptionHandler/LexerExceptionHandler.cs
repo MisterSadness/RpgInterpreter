@@ -2,13 +2,14 @@
 
 namespace RpgInterpreter.ExceptionHandler;
 
-public class LexerExceptionHandler : IExceptionHandler
+public class LexerExceptionHandler : ExceptionHandler
 {
     private readonly ErrorAreaPrinter _errorAreaPrinter;
 
-    public LexerExceptionHandler(ErrorAreaPrinter errorAreaPrinter) => _errorAreaPrinter = errorAreaPrinter;
+    public LexerExceptionHandler(ErrorAreaPrinter errorAreaPrinter, IOutput output) : base(output) =>
+        _errorAreaPrinter = errorAreaPrinter;
 
-    public void RunAndHandle(Action action)
+    public override void RunAndHandle(Action action)
     {
         try
         {
@@ -16,13 +17,11 @@ public class LexerExceptionHandler : IExceptionHandler
         }
         catch (LexingException e)
         {
-            Console.WriteLine("Lexing exception occurred:");
-            if (e is IPointPositionedException positioned)
+            Output.WriteLine($"Lexing exception occurred: {e.Message}");
+            if (e is IPositionedException positioned)
             {
-                Console.WriteLine(_errorAreaPrinter.FindErrorSurroundings(positioned));
+                Output.WriteLine(_errorAreaPrinter.FindErrorSurroundings(positioned));
             }
-
-            Console.WriteLine(e);
         }
     }
 }

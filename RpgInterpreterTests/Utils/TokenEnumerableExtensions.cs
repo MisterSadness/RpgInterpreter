@@ -3,7 +3,7 @@ using RpgInterpreter;
 using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.Parser.ParsingFunctions;
 
-namespace RpgInterpreterTests.ParserTests.Utils;
+namespace RpgInterpreterTests.Utils;
 
 internal static class TokenEnumerableExtensions
 {

@@ -8,8 +8,8 @@ public partial class SourceState
     public IParseResult<ObjectCreation> ParseObjectCreation()
     {
         var start = CurrentPosition;
-        var keyword = ParseToken<New>();
-        var className = keyword.Source.ParseToken<UppercaseIdentifier>();
+        //var keyword = ParseToken<New>();
+        var className = ParseToken<UppercaseIdentifier>();
         var afterTraits = className.Source;
         TraitList? traits = null;
         if (className.Source.PeekOrDefault() is With)

@@ -40,7 +40,7 @@ public partial class SourceState
 
         if (parsedName.Source.PeekOrDefault() is Access)
         {
-            return parsedName.Source.ParseAccess(new Variable(parsedName.Result.Identifier, start, end));
+            return parsedName.Source.ParseAccess(new VariableExp(parsedName.Result.Identifier, start, end));
         }
 
         if (parsedName.Source.PeekOrDefault() is OpenParen)
@@ -58,7 +58,7 @@ public partial class SourceState
         }
 
         end = parsedName.Source.CurrentPosition;
-        return parsedName.WithValue(new Variable(parsedName.Result.Identifier, start, end));
+        return parsedName.WithValue(new VariableExp(parsedName.Result.Identifier, start, end));
     }
 
     public IParseResult<FieldReference> ParseAccess(NameReference objectName)
@@ -89,25 +89,5 @@ public partial class SourceState
         var end = parsed.Source.CurrentPosition;
 
         return parsed.WithValue(new This(start, end));
-    }
-
-    public IParseResult<FunctionInvocation> ParseFunctionInvocation()
-    {
-        var start = CurrentPosition;
-        var parsedName = ParseToken<LowercaseIdentifier>();
-        var functionName = parsedName.Result;
-        var parsedOpenParen = parsedName.Source.ParseToken<OpenParen>();
-        var arguments = parsedOpenParen.Source.ParseSeparated<Expression, Comma, CloseParen>(s => s.ParseExpression());
-        var end = arguments.Source.CurrentPosition;
-
-        return arguments.WithValue(new FunctionInvocation(functionName.Identifier, arguments.Result, start, end));
-    }
-
-    public IParseResult<FunctionInvocationStatement> ParseFunctionInvocationStatement()
-    {
-        var start = CurrentPosition;
-        var parsed = ParseFunctionInvocation();
-        var end = parsed.Source.CurrentPosition;
-        return parsed.WithValue(new FunctionInvocationStatement(parsed.Result, start, end));
     }
 }

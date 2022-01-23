@@ -2,7 +2,6 @@
 using RpgInterpreter.Parser.Grammar;
 using RpgInterpreter.Parser.ParsingExceptions;
 using Assignment = RpgInterpreter.Parser.Grammar.Assignment;
-using If = RpgInterpreter.Parser.Grammar.If;
 
 namespace RpgInterpreter.Parser.ParsingFunctions;
 
@@ -15,7 +14,7 @@ public partial class SourceState
 
         var inner = open.Source.ParseTerminated<IBlockInner, Semicolon, CloseBrace>(s => s.ParseBlockInner());
         var innerList = inner.Result.ToList();
-        if (innerList.SkipLast(1).Any(x => x is not Assignment and not If and not FunctionInvocation))
+        if (innerList.SkipLast(1).Any(x => x is not Assignment and not IfExpression and not FunctionInvocation))
         {
             throw new ParsingException("Invalid block with an expression outside of last position.");
         }

@@ -1,14 +1,16 @@
-﻿namespace RpgInterpreter.Parser.Grammar;
+﻿using RpgInterpreter.TypeChecker;
+
+namespace RpgInterpreter.Parser.Grammar;
 
 public abstract record Expression(Position Start, Position End) : Node(Start, End), IBlockInner;
 
-public record List(NodeList<Expression> Elements, Position Start, Position End) : Expression(Start, End);
+public record ListExp(NodeList<Expression> Elements, Position Start, Position End) : Expression(Start, End);
 
 public record Unit(Position Start, Position End) : Expression(Start, End);
 
 public record Natural(int Value, Position Start, Position End) : Expression(Start, End);
 
-public record Dice(int Count, int Max, Position Start, Position End) : Expression(Start, End);
+public record DiceExpression(int Count, int Max, Position Start, Position End) : Expression(Start, End);
 
 public record StringExpression(string Value, Position Start, Position End) : Expression(Start, End);
 
@@ -16,25 +18,25 @@ public record BooleanExpression(bool Value, Position Start, Position End) : Expr
 
 public record UnaryMinus(Expression Value, Position Start, Position End) : Expression(Start, End);
 
-public record If
+public record IfExpression
     (Expression Condition, Expression TrueValue, Expression FalseValue, Position Start, Position End) : Expression(
         Start, End);
 
 // If Block is only statements then Last is set to the Unit expression.
 public record Block
-    (NodeList<IBlockInner> Inner, Expression Last, Position Start, Position End) : Expression(Start, End);
+    (NodeList<IBlockInner> Inner, Expression Last, Position Start, Position End) : Expression(Start, End), IWithScope;
 
 public record ObjectCreation(string Type, TraitList? Traits, Position Start, Position End) : Expression(Start, End);
 
-public record TraitList(NodeList<string> Traits, Position Start, Position End) : Expression(Start, End);
+public record TraitList(NodeList<string> Traits, Position Start, Position End) : Node(Start, End);
 
 public abstract record Reference(Position Start, Position End) : Expression(Start, End);
 
 public interface IAssignable { }
 
-public abstract record NameReference(Position Start, Position End) : Reference(Start, End), IAssignable;
+public abstract record NameReference(Position Start, Position End) : Reference(Start, End);
 
-public record Variable(string Name, Position Start, Position End) : NameReference(Start, End);
+public record VariableExp(string Name, Position Start, Position End) : NameReference(Start, End), IAssignable;
 
 public record Base(Position Start, Position End) : NameReference(Start, End);
 

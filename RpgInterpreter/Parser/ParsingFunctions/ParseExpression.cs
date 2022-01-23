@@ -2,7 +2,6 @@
 using RpgInterpreter.Parser.Grammar;
 using RpgInterpreter.Parser.ParsingExceptions;
 using Base = RpgInterpreter.Lexer.Tokens.Base;
-using If = RpgInterpreter.Lexer.Tokens.If;
 using This = RpgInterpreter.Lexer.Tokens.This;
 
 namespace RpgInterpreter.Parser.ParsingFunctions;
@@ -23,7 +22,7 @@ public partial class SourceState
             Base or This => ParseSelfReference(),
             OpenParen => ParseParentheses(),
             If => ParseIf(),
-            New => ParseObjectCreation(),
+            UppercaseIdentifier => ParseObjectCreation(),
             OpenBrace => ParseBlock(),
             _ => throw new ParsingException($"Expected expression at {CurrentPosition.Formatted}.")
         };

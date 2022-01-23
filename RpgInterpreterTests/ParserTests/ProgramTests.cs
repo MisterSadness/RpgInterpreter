@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RpgInterpreter.Lexer.Tokens;
 using RpgInterpreter.Parser.Grammar;
-using RpgInterpreterTests.ParserTests.Utils;
+using RpgInterpreterTests.Utils;
 using AssignmentToken = RpgInterpreter.Lexer.Tokens.Assignment;
 using IfToken = RpgInterpreter.Lexer.Tokens.If;
 

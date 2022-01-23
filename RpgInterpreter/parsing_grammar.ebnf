@@ -55,7 +55,7 @@ obj inner = "{", fields, "}";
 trait declaration = "trait", up id, trait requirements, obj inner;
 trait requirements = "for", up id | ;
 
-object creation = "new", up id, trait list start;
+object creation = up id, trait list start;
 
 function = "fun", low id, "(", function parameters, ")", block;
 function parameters = low id, ":", up id, function parameter next | ;
