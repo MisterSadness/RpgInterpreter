@@ -395,6 +395,11 @@ public record InterpreterState(
         var left = EvaluateExpression(binaryOperation.Left);
         var right = EvaluateExpression(binaryOperation.Right);
 
+        if (binaryOperation is DivisionExp && right is Integer { Value: 0 })
+        {
+            throw new DivisionByZeroException(binaryOperation);
+        }
+
         return binaryOperation switch
         {
             AdditionExp => EvaluateAddition(left, right),

@@ -1,5 +1,5 @@
 ﻿Parsing exception occurred: Expected to find Semicolon but found CloseBrace { } at position line 4, column 35.
-at: line 4, column 35
+At: line 4, column 35
 	set z = 7;
 	set i = if z + x > 3 then 0 else 1
                                    ^

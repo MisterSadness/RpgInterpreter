@@ -1,0 +1,2 @@
+﻿set x = 3 / (1 - 1);
+print(getString(x)++"\n");

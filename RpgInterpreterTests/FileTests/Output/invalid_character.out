@@ -1,5 +1,5 @@
 ﻿Lexing exception occurred: Character '$' does not match the start of any token.
-at: line 2, column 10
+At: line 2, column 10
 
 set y = 2 $ 3;
           ^

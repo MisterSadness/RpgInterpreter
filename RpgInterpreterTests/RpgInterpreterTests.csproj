@@ -17,6 +17,7 @@
     <None Remove="FileTests\Input\invalid_character.in" />
     <None Remove="FileTests\Input\missing_coma.in" />
     <None Remove="FileTests\Input\object_declaration.in" />
+    <None Remove="FileTests\Input\zero_division.in" />
     <None Remove="FileTests\Output\arithmetics.out" />
     <None Remove="FileTests\Output\boolean.out" />
     <None Remove="FileTests\Output\dice.out" />
@@ -25,6 +26,7 @@
     <None Remove="FileTests\Output\invalid_character.out" />
     <None Remove="FileTests\Output\missing_coma.out" />
     <None Remove="FileTests\Output\object_declaration.out" />
+    <None Remove="FileTests\Output\zero_division.out" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Content Include="FileTests\Input\zero_division.in">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
 	<Content Include="FileTests\Input\functions_parameter_count_error.in">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	</Content>
@@ -63,6 +68,9 @@
 	  <Content Include="FileTests\Input\arithmetics.in">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	  <Content Include="FileTests\Output\zero_division.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	  <Content Include="FileTests\Output\boolean.out">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>

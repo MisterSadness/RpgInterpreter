@@ -1,0 +1,5 @@
+﻿Runtime exception occurred: Attempted to divide by zero.
+At: line 0, column 7
+set x = 3 / (1 - 1);
+       ^^^^^^^^^^^^^
+print(getString(x)++"\n");
