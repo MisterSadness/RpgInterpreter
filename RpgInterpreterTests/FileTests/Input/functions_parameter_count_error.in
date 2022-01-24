@@ -1,0 +1,10 @@
+﻿fun factorial(i: Int) Int {
+	if i <= 1 then 1 else i * factorial(i-1);
+};
+
+fun printLine(s: String) Unit {
+	print(s ++ "\n");
+};
+
+printLine(getString(factorial(5, 4)));
+

@@ -29,7 +29,6 @@ internal class AssignmentTests
         var source = tokens.ToSourceState();
 
         Assert.That(() => source.ParseAssignment(), Throws.InstanceOf<ParsingException>());
-        //Assert.Throws<ExpectedTokenNotFoundException<Set>>(() => source.ParseAssignment());
     }
 
     [TestCaseSource(nameof(_assignmentData))]

@@ -5,7 +5,7 @@ namespace RpgInterpreterTests.E2ETests;
 
 public class AssignmentTests
 {
-    private static readonly IEnumerable<E2ETestCase> _programs = new[]
+    private static IEnumerable<E2ETestCase> _programs = new[]
     {
         new E2ETestCase("set x = \"abc\"; set y = 7; print(x ++ getString(y));", "abc7"),
         new E2ETestCase("set x = 3; set y = 7; print(getString(x));", "3"),
