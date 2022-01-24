@@ -1,0 +1,26 @@
+﻿fun printLine(s: String) Unit {
+	print(s ++ "\n");
+};
+
+fun factorial(i: Int) Int {
+	if i <= 1 then 1 else i * factorial(i-1);
+};
+
+fun flipCoin() Bool {
+    roll(1d2) == 1;
+};
+
+fun hello(name: String) Unit {
+    print(name);
+};
+fun add3(x: Int) Int {
+    x+3;
+};
+
+set x = add3(factorial(5));
+
+printLine(getString(x));
+
+set x = add3(x);
+
+printLine(getString(x));

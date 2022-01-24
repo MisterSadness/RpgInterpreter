@@ -1,0 +1,71 @@
+syntax = program;
+program = | statement, ";", program ;
+statement = object declaration | trait declaration | function | assignment | paren, invoke;
+
+assignment = "set", name, "=", expression ;
+
+expression = if | start1, next1 ;
+
+start1 = start2, next2;
+next1 = "&&" , expression | "||" , expression | ;
+
+start2 = start3, next3;
+next2 = "==" , start1 | "!=" , start1 | "<" , start1 | ">" , start1 | "<=" , start1 | ">=" , start1 | ;
+
+start3 = "-" , start2 | start4, next4;
+next3 = ;
+
+start4 = start5, next5;
+next4 =  "+" , start3 | "-"  , start3 | ;
+
+start5 = start6, next6;
+next5 = "*" , start4 | "/" , start4 | ;
+
+start6 = paren;
+next6 = "++" , start5 | invoke | ;
+
+invoke = "(", invoke inner, ")";
+invoke inner = expression, invoke list | ;
+invoke list = ",", expression, invoke list | ;
+
+paren = "(", expression, ")" | value | block | name;
+block = "{", block inner, "}";
+block inner = | single block line, ";", block inner;
+single block line = if | paren, invoke | assignment;
+value = dice literal | natural literal | bool literal | string literal | list literal | object creation;
+name = low id , field reference | base , field reference | this, field reference;
+field reference = "." , up id | ;
+
+list literal = "[" , inner list , "]";
+inner list = expression, inner list cont | ;
+inner list cont = "," , expression, inner list cont | ;
+
+if = "if", expression, "then", expression, "else", expression;
+
+object declaration = up id, base list, obj inner ;
+base list = "extends", up id, trait list start | ;
+trait list start = "with", up id, trait list next | ;
+trait list next = "and", up id, trait list next | ;
+fields = field, field list | ;
+fields list = ",", field, field list
+field = up id, ":", expression;
+
+obj inner = "{", fields, "}";
+
+trait declaration = "trait", up id, trait requirements, obj inner;
+trait requirements = "for", up id | ;
+
+object creation = up id, trait list start;
+
+function = "fun", low id, "(", function parameters, ")", block;
+function parameters = low id, ":", up id, function parameter next | ;
+function parameters next = ",", low id, ":", up id, function parameter next | ;
+
+base = "base";
+this = "this";
+low id = "id";
+up id = "Id";
+bool literal = "bool";
+natural literal = "natural";
+dice literal = "dice";
+string literal = "string";

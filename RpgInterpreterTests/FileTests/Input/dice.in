@@ -1,0 +1,26 @@
+﻿set x = 3d1 - 2d1 - 1d1;
+print(getString(roll(x))++"\n");
+
+set x = 3d1 - 2d1 - -1d1;
+print(getString(roll(x))++"\n");
+
+set x = (2d1 + 2d1 * 2d1);
+print(getString(roll(x))++"\n");
+
+set x = 2d1 * 2d1 + 2d1;
+print(getString(roll(x))++"\n");
+
+set x = (2d1+2d1)*2d1;
+print(getString(roll(x))++"\n");
+
+set x = (3d1 + 7d1) / (4d1 * 2d1);
+print(getString(roll(x))++"\n");
+
+set x = 4d1 / 2d1 / 2d1;
+print(getString(roll(x))++"\n");
+
+set x = 3d1 + 2d1 + -1d1;
+print(getString(roll(x))++"\n");
+
+set x = 3d1 + 2d1 / 5d1;
+print(getString(roll(x))++"\n");

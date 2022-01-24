@@ -1,68 +1,75 @@
 ﻿using System.Text;
+using Optional.Unsafe;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
-using RpgInterpreter.Tokens;
+using RpgInterpreter.Lexer.Tokens;
 
-namespace RpgInterpreter.Lexer.InnerLexers
+namespace RpgInterpreter.Lexer.InnerLexers;
+
+public class StringLexer : InnerLexer
 {
-    public class StringLexer : InnerLexer
+    public override bool FirstCharacterMatches(char c) => c == '"';
+
+    public override Token Match(ICharSource source)
     {
-        public override bool FirstCharacterMatches(char c) => c == '"';
+        var sb = new StringBuilder();
 
-        public override Token Match(ICharSource source)
+        // Pop starting quote, the exception shouldn't happen if we chose this lexer
+        var starting = source.Pop().ToNullable();
+        if (starting is null)
         {
-            var sb = new StringBuilder();
+            throw new UnexpectedEndOfInputException();
+        }
 
-            // Pop starting quote, the exception shouldn't happen if we chose this lexer
-            var starting = source.Pop();
-            if (starting is not '"')
+        if (starting is not '"')
+        {
+            throw new UnexpectedInputException('"', starting.Value);
+        }
+
+        var c = source.Pop().ToNullable();
+        while (c.HasValue)
+        {
+            if (c is '\\')
             {
-                throw new MissingOpeningQuoteException();
+                c = MatchEscaped();
+                sb.Append(c);
+            }
+            else if (c is '"')
+            {
+                break;
+            }
+            else if (IsInnerString(c.Value))
+            {
+                sb.Append(c);
+            }
+            else
+            {
+                throw new InvalidCharacterException(c.Value);
             }
 
-            var c = source.Pop();
-            while (c.HasValue)
+            c = source.Pop().ToNullable();
+        }
+
+        if (c is not '"')
+        {
+            throw new MissingClosingQuoteException();
+        }
+
+        return new StringLiteral(sb.ToString());
+
+        bool IsInnerString(char x) => char.IsLetterOrDigit(x) || char.IsPunctuation(x) || x is ' ' or '\t';
+
+        char MatchEscaped()
+        {
+            return source.Pop().ToNullable() switch
             {
-                if (c is '\\')
-                {
-                    c = MatchEscaped();
-                    sb.Append(c);
-                }
-                else if (c is '"')
-                {
-                    break;
-                }
-                else if (IsInnerString(c.Value))
-                {
-                    sb.Append(c);
-                }
-                else
-                {
-                    throw new InvalidCharacterException();
-                }
-
-                c = source.Pop();
-            }
-
-            if (c is not '"')
-            {
-                throw new MissingClosingQuoteException();
-            }
-
-            return new StringLiteral(sb.ToString());
-
-            bool IsInnerString(char x) => char.IsLetterOrDigit(x) || char.IsPunctuation(x) || x is ' ' or '\t';
-
-            char MatchEscaped()
-            {
-                return source.Pop() switch
-                {
-                    'n' => '\n',
-                    '"' => '"',
-                    '\\' => '\\',
-                    _ => throw new UndefinedEscapeSequenceException()
-                };
-            }
+                'n' => '\n',
+                't' => '\t',
+                '"' => '"',
+                '\\' => '\\',
+                { } escaped => throw new UndefinedEscapeSequenceException(escaped),
+                _ => throw new UnexpectedEndOfInputException()
+            };
         }
     }
 }

@@ -1,38 +1,37 @@
 ﻿using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
-using RpgInterpreter.Tokens;
+using RpgInterpreter.Lexer.Tokens;
 
-namespace RpgInterpreter.Lexer.InnerLexers
+namespace RpgInterpreter.Lexer.InnerLexers;
+
+public class DiceOrNaturalLexer : InnerLexer
 {
-    public class DiceOrNaturalLexer : InnerLexer
+    public override bool FirstCharacterMatches(char c) => char.IsDigit(c);
+
+    public override Token Match(ICharSource source)
     {
-        public override bool FirstCharacterMatches(char c) => char.IsDigit(c);
+        var firstInt = MatchInt();
+        var separator = source.Peek();
 
-        public override Token Match(ICharSource source)
+        if (!separator.Exists(c => c == 'd'))
         {
-            var firstInt = MatchInt();
-            var separator = source.Peek();
+            return new NaturalLiteral(firstInt);
+        }
 
-            if (separator is not 'd')
+        source.Pop();
+        var secondInt = MatchInt();
+        return new DiceLiteral(firstInt, secondInt);
+
+        int MatchInt()
+        {
+            var str = MatchAll(source, char.IsDigit);
+
+            if (int.TryParse(str, out var result))
             {
-                return new NaturalLiteral(firstInt);
+                return result;
             }
 
-            source.Pop();
-            var secondInt = MatchInt();
-            return new DiceLiteral(firstInt, secondInt);
-
-            int MatchInt()
-            {
-                var str = MatchAll(source, char.IsDigit);
-
-                if (int.TryParse(str, out var result))
-                {
-                    return result;
-                }
-
-                throw new ExpectedIntegerLiteralException();
-            }
+            throw new ExpectedIntegerLiteralException();
         }
     }
 }

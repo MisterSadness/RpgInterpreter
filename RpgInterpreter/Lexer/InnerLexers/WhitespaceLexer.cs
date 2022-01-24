@@ -1,29 +1,22 @@
-﻿using RpgInterpreter.Lexer.LexingErrors;
-using RpgInterpreter.Lexer.Sources;
-using RpgInterpreter.Tokens;
+﻿using RpgInterpreter.Lexer.Sources;
+using RpgInterpreter.Lexer.Tokens;
 
-namespace RpgInterpreter.Lexer.InnerLexers
+namespace RpgInterpreter.Lexer.InnerLexers;
+
+public class WhitespaceLexer : InnerLexer
 {
-    public class WhitespaceLexer : InnerLexer
+    public override bool FirstCharacterMatches(char c) => char.IsWhiteSpace(c);
+
+    public override Token Match(ICharSource source)
     {
-        public override bool FirstCharacterMatches(char c) => char.IsWhiteSpace(c);
+        var option = source.Peek();
 
-        public override Token Match(ICharSource source)
+        while (option.Exists(char.IsWhiteSpace))
         {
-            var c = source.Peek();
-
-            if (!c.HasValue || !char.IsWhiteSpace(c.Value))
-            {
-                throw new UnexpectedInputException();
-            }
-
-            while (c.HasValue && char.IsWhiteSpace(c.Value))
-            {
-                source.Pop();
-                c = source.Peek();
-            }
-
-            return new Whitespace();
+            source.Pop();
+            option = source.Peek();
         }
+
+        return new Whitespace();
     }
 }

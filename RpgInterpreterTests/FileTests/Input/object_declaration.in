@@ -1,0 +1,44 @@
+﻿Entity {
+    Name: "Unknown",
+    Strength: 30,
+    Dexterity: 30,
+    Willpower: 30,
+    Health: (this.Strength + 2 * this.Dexterity) / 10
+};
+
+trait Strong for Entity {
+    Strength: base.Strength + 10
+};
+
+set fighter = Entity with Strong;
+set fighter.Name = "Marcus";
+set bandit = Entity;
+set bandit.Name = "Otto";
+
+print(getString(fighter.Strength)++"\n");
+
+trait Nimble for Entity {
+    Dexterity: base.Dexterity * 2
+};
+
+trait Powerless for Entity {
+    Strength: 0
+};
+
+fun foo(x: Powerless) Unit {
+    print(x.Name ++ " has " ++ getString(x.Strength) ++ " Strength! \n");
+};
+
+set stackedTraits = Entity with Strong and Nimble and Powerless;
+
+print(getString(stackedTraits.Strength)++"\n");
+
+trait WithPowerLevel {
+    PowerLevel: 1
+};
+
+trait Empty { };
+
+trait Marker for Entity { };
+
+print(getString(Entity with WithPowerLevel));

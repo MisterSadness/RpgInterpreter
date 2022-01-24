@@ -1,0 +1,5 @@
+﻿Semantic exception occurred: Function factorial takes 1 parameters, but was given 2.
+at: line 8, column 20
+
+printLine(getString(factorial(5, 4)));
+                    ^^^^^^^^^^^^^^^^

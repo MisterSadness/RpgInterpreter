@@ -1,16 +1,17 @@
-﻿using RpgInterpreter.Lexer.Sources;
+﻿using RpgInterpreter.ExceptionHandler;
 
-namespace RpgInterpreter.Lexer.LexingErrors
+namespace RpgInterpreter.Lexer.LexingErrors;
+
+public class PositionedLexingException : LexingException, IPointPositionedException
 {
-    public class PositionedLexingException : LexingException
+    public PositionedLexingException(LexingException inner, Position position) : base(
+        $"Lexing failed at: {position.Formatted}",
+        inner)
     {
-        public PositionedLexingException(LexingException inner, Position position)
-        {
-            Inner = inner;
-            Position = position;
-        }
-
-        public LexingException Inner { get; }
-        public Position Position { get; }
+        Inner = inner;
+        Position = position;
     }
+
+    public LexingException Inner { get; }
+    public Position Position { get; }
 }

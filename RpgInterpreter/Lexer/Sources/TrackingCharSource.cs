@@ -1,22 +1,26 @@
-﻿namespace RpgInterpreter.Lexer.Sources
+﻿using Optional;
+
+namespace RpgInterpreter.Lexer.Sources;
+
+internal class TrackingCharSource : ICharSource
 {
-    internal class TrackingCharSource : ICharSource
+    private readonly ICharSource _inner;
+    private int _column;
+
+    private int _line;
+
+    public TrackingCharSource(ICharSource inner) => _inner = inner;
+
+    public Position Position => new(_line, _column);
+
+    public Option<char> Peek() => _inner.Peek();
+
+    public Option<char> Pop()
     {
-        private readonly ICharSource _inner;
-        private int _column;
+        var option = _inner.Pop();
 
-        private int _line;
-
-        public TrackingCharSource(ICharSource inner) => _inner = inner;
-
-        public Position Position => new(_line, _column);
-
-        public char? Peek() => _inner.Peek();
-
-        public char? Pop()
+        option.MatchSome(c =>
         {
-            var c = _inner.Pop();
-
             if (c is '\n')
             {
                 _line++;
@@ -26,8 +30,8 @@
             {
                 _column++;
             }
+        });
 
-            return c;
-        }
+        return option;
     }
 }

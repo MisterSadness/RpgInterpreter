@@ -1,28 +1,27 @@
-﻿namespace RpgInterpreter.Lexer.Sources
+﻿using Optional;
+using RpgInterpreter.Utils;
+
+namespace RpgInterpreter.Lexer.Sources;
+
+public class StringSource : ICharSource
 {
-    public class StringSource : ICharSource
+    private readonly string _string;
+    private int _position;
+
+    public StringSource(string s)
     {
-        private readonly string _string;
-        private int _position;
+        _string = s;
+        _position = 0;
+    }
 
-        public StringSource(string s)
-        {
-            _string = s;
-            _position = 0;
-        }
+    public Option<char> Peek() => _position
+        .SomeWhen(_position < _string.Length)
+        .Map(p => _string[p]);
 
-        public char? Peek() => _position < _string.Length ? _string[_position] : null;
-
-        public char? Pop()
-        {
-            if (_position >= _string.Length)
-            {
-                return null;
-            }
-
-            var result = _string[_position];
-            _position++;
-            return result;
-        }
+    public Option<char> Pop()
+    {
+        var result = Peek();
+        result.MatchSome(_ => _position++);
+        return result;
     }
 }

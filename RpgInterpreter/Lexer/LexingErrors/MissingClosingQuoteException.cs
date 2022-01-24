@@ -1,4 +1,6 @@
-﻿namespace RpgInterpreter.Lexer.LexingErrors
+﻿namespace RpgInterpreter.Lexer.LexingErrors;
+
+public class MissingClosingQuoteException : LexingException
 {
-    public class MissingClosingQuoteException : LexingException { }
+    public MissingClosingQuoteException() : base("String literal is missing an ending quote.") { }
 }

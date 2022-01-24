@@ -1,10 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="FileTests\Input\arithmetics.in" />
+    <None Remove="FileTests\Input\boolean.in" />
+    <None Remove="FileTests\Input\dice.in" />
+    <None Remove="FileTests\Input\functions.in" />
+    <None Remove="FileTests\Input\functions_parameter_count_error.in" />
+    <None Remove="FileTests\Input\invalid_character.in" />
+    <None Remove="FileTests\Input\missing_coma.in" />
+    <None Remove="FileTests\Input\object_declaration.in" />
+    <None Remove="FileTests\Output\arithmetics.out" />
+    <None Remove="FileTests\Output\boolean.out" />
+    <None Remove="FileTests\Output\dice.out" />
+    <None Remove="FileTests\Output\functions.out" />
+    <None Remove="FileTests\Output\functions_parameter_count_error.out" />
+    <None Remove="FileTests\Output\invalid_character.out" />
+    <None Remove="FileTests\Output\missing_coma.out" />
+    <None Remove="FileTests\Output\object_declaration.out" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
@@ -15,6 +36,57 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RpgInterpreter\RpgInterpreter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<Content Include="FileTests\Input\functions_parameter_count_error.in">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="FileTests\Input\invalid_character.in">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="FileTests\Input\missing_coma.in">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="FileTests\Input\boolean.in">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="FileTests\Input\dice.in">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="FileTests\Input\functions.in">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+	<Content Include="FileTests\Input\object_declaration.in">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	  <Content Include="FileTests\Input\arithmetics.in">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	  <Content Include="FileTests\Output\boolean.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="FileTests\Output\dice.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="FileTests\Output\arithmetics.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="FileTests\Output\functions.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="FileTests\Output\functions_parameter_count_error.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="FileTests\Output\invalid_character.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="FileTests\Output\missing_coma.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="FileTests\Output\object_declaration.out">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,6 @@
+﻿set x = 3 - 2 - 1;
+
+set y = {
+	set z = 7;
+	set i = if z + x > 3 then 0 else 1
+};
