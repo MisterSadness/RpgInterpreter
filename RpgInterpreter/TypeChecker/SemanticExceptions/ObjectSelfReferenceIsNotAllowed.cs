@@ -1,7 +1,7 @@
 ﻿using RpgInterpreter.ExceptionHandler;
 using RpgInterpreter.Parser.Grammar;
 
-namespace RpgInterpreter.Runtime.SemanticExceptions;
+namespace RpgInterpreter.TypeChecker.SemanticExceptions;
 
 public class ObjectSelfReferenceIsNotAllowed : SemanticException, IIntervalPositionedException
 {

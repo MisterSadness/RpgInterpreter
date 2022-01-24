@@ -1,8 +1,8 @@
 ﻿using RpgInterpreter.ExceptionHandler;
 using RpgInterpreter.Parser.Grammar;
-using Type = RpgInterpreter.TypeChecker.Type;
+using RpgInterpreter.Runtime;
 
-namespace RpgInterpreter.Runtime.SemanticExceptions;
+namespace RpgInterpreter.TypeChecker.SemanticExceptions;
 
 internal class NonDiceRollException : SemanticException, IIntervalPositionedException
 {

@@ -1,8 +1,7 @@
 ﻿using RpgInterpreter.ExceptionHandler;
 using RpgInterpreter.Parser.Grammar;
-using Type = RpgInterpreter.TypeChecker.Type;
 
-namespace RpgInterpreter.Runtime.SemanticExceptions;
+namespace RpgInterpreter.TypeChecker.SemanticExceptions;
 
 public class TypeInferenceFailedException : SemanticException, IIntervalPositionedException
 {

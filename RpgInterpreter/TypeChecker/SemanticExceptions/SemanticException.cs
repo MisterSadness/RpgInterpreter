@@ -1,4 +1,4 @@
-﻿namespace RpgInterpreter.Runtime.SemanticExceptions;
+﻿namespace RpgInterpreter.TypeChecker.SemanticExceptions;
 
 public class SemanticException : Exception
 {

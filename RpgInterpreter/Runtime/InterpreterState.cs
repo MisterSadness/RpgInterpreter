@@ -2,8 +2,8 @@
 using RpgInterpreter.Output;
 using RpgInterpreter.Parser.Grammar;
 using RpgInterpreter.Runtime.RuntimeExceptions;
-using RpgInterpreter.Runtime.SemanticExceptions;
 using RpgInterpreter.TypeChecker;
+using RpgInterpreter.TypeChecker.SemanticExceptions;
 
 namespace RpgInterpreter.Runtime;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using RpgInterpreter.Parser.Grammar;
-using RpgInterpreter.Runtime.SemanticExceptions;
+using RpgInterpreter.TypeChecker.SemanticExceptions;
 
 namespace RpgInterpreter.TypeChecker;
 
