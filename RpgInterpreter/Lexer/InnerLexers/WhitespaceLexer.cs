@@ -1,5 +1,4 @@
-﻿using RpgInterpreter.Lexer.LexingErrors;
-using RpgInterpreter.Lexer.Sources;
+﻿using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Lexer.Tokens;
 
 namespace RpgInterpreter.Lexer.InnerLexers;
@@ -11,11 +10,6 @@ public class WhitespaceLexer : InnerLexer
     public override Token Match(ICharSource source)
     {
         var option = source.Peek();
-
-        if (!option.Exists(char.IsWhiteSpace))
-        {
-            throw new UnexpectedInputException();
-        }
 
         while (option.Exists(char.IsWhiteSpace))
         {

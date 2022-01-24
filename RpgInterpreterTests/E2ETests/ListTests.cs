@@ -30,6 +30,7 @@ public class ListTests
                         "set x.Stuff = [false];" +
                         "print(getString(x));",
             ("Semantic exception occurred: Type inference failed: Expected List[Int], but got List[Bool]." +
+             "\nat: line 0, column 157" +
              "\nEntity { Stuff: [] }; trait Strong for Entity { Stuff: base.Stuff ++ [3] }; StrongEntity extends Entity with Strong {};set x = StrongEntity;set x.Stuff = [];set x.Stuff = [false];print(getString(x));" +
              "\n                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^\n\n"
             ).ReplaceLineEndings()),
@@ -40,7 +41,7 @@ public class ListTests
             "anonymous {\n  Stuff: [Test]\n}\n".ReplaceLineEndings()),
         new E2ETestCase("set x = []; set x = [1,2,3];", ""),
         new E2ETestCase("set x = []; set x = [1,2,3]; set x = []; set x = [false];",
-            "Semantic exception occurred: Type inference failed: Expected List[Int], but got List[Bool].\nset x = []; set x = [1,2,3]; set x = []; set x = [false];\n                                        ^^^^^^^^^^^^^^^^^\n\n"
+            "Semantic exception occurred: Type inference failed: Expected List[Int], but got List[Bool].\nat: line 0, column 40\nset x = []; set x = [1,2,3]; set x = []; set x = [false];\n                                        ^^^^^^^^^^^^^^^^^\n\n"
                 .ReplaceLineEndings()),
         new E2ETestCase("set x = []; set y = x ++ [1,2,3];", "")
     };

@@ -16,9 +16,14 @@ public class StringLexer : InnerLexer
 
         // Pop starting quote, the exception shouldn't happen if we chose this lexer
         var starting = source.Pop().ToNullable();
+        if (starting is null)
+        {
+            throw new UnexpectedEndOfInputException();
+        }
+
         if (starting is not '"')
         {
-            throw new MissingOpeningQuoteException();
+            throw new UnexpectedInputException('"', starting.Value);
         }
 
         var c = source.Pop().ToNullable();
@@ -39,7 +44,7 @@ public class StringLexer : InnerLexer
             }
             else
             {
-                throw new InvalidCharacterException();
+                throw new InvalidCharacterException(c.Value);
             }
 
             c = source.Pop().ToNullable();
@@ -62,7 +67,8 @@ public class StringLexer : InnerLexer
                 't' => '\t',
                 '"' => '"',
                 '\\' => '\\',
-                _ => throw new UndefinedEscapeSequenceException()
+                { } escaped => throw new UndefinedEscapeSequenceException(escaped),
+                _ => throw new UnexpectedEndOfInputException()
             };
         }
     }

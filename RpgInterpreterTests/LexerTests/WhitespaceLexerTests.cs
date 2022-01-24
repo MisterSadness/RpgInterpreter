@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
 using RpgInterpreter.Lexer.InnerLexers;
-using RpgInterpreter.Lexer.LexingErrors;
-using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Lexer.Tokens;
 
 namespace RpgInterpreterTests.LexerTests;
@@ -25,13 +23,5 @@ internal class WhitespaceLexerTests
         var result = _lexer.Match(data.Source);
 
         Assert.That(result, Is.EqualTo(data.Output));
-    }
-
-    [Test]
-    public void DoesNotAcceptEmptyString()
-    {
-        var source = new StringSource("");
-
-        Assert.Throws<UnexpectedInputException>(() => _lexer.Match(source));
     }
 }

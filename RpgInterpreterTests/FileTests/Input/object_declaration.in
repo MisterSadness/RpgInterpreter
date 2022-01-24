@@ -37,6 +37,10 @@ trait WithPowerLevel {
     PowerLevel: 1
 };
 
+trait Empty { };
+
+trait Marker for Entity { };
+
 set z = Entity with WithPowerLevel;
 
 print(getString(z));

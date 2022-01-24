@@ -26,6 +26,7 @@ public class ErrorAreaPrinter
         var delta = 1;
 
         var output = new StringBuilder();
+        output.AppendLine($"at: {exception.Start.Formatted}");
 
         while (reader.ReadLine() is { } lineString && currentLine < endLine + delta)
         {
@@ -69,6 +70,7 @@ public class ErrorAreaPrinter
         var delta = 1;
 
         var output = new StringBuilder();
+        output.AppendLine($"at: {exception.Position.Formatted}");
 
         while (reader.ReadLine() is { } lineString && currentLine < targetLine + delta)
         {

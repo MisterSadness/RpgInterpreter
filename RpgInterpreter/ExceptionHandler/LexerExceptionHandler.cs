@@ -15,9 +15,9 @@ public class LexerExceptionHandler : ExceptionHandler
         {
             action();
         }
-        catch (LexingException e)
+        catch (PositionedLexingException e)
         {
-            Output.WriteLine($"Lexing exception occurred: {e.Message}");
+            Output.WriteLine($"Lexing exception occurred: {e.Inner.Message}");
             if (e is IPositionedException positioned)
             {
                 Output.WriteLine(_errorAreaPrinter.FindErrorSurroundings(positioned));

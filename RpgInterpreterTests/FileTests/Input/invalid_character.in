@@ -1,0 +1,5 @@
+﻿set x = 2 + 2;
+
+set y = 2 $ 3;
+
+print(getString(x + y));

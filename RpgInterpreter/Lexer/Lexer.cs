@@ -1,4 +1,5 @@
-﻿using RpgInterpreter.Lexer.InnerLexers;
+﻿using Optional.Unsafe;
+using RpgInterpreter.Lexer.InnerLexers;
 using RpgInterpreter.Lexer.LexingErrors;
 using RpgInterpreter.Lexer.Sources;
 using RpgInterpreter.Lexer.Tokens;
@@ -17,7 +18,7 @@ public class Lexer
         while (c.HasValue)
         {
             var possible = _inner.SingleOrDefault(i => c.Exists(i.FirstCharacterMatches))
-                           ?? throw new UnexpectedInputException();
+                           ?? throw new UnexpectedInputException(c.ValueOrFailure());
 
             var matched = possible.Match(source);
             if (matched is not Whitespace)

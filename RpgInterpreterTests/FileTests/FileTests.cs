@@ -24,14 +24,14 @@ public class FileTests
         {
             Console.WriteLine($"({++currentTest}/{totalTests}) {Path.GetFileName(inFile)[..^3]} Test:");
             var inString = File.ReadAllText(inFile).ReplaceLineEndings();
-            var outString = File.ReadAllText(outFile).ReplaceLineEndings();
+            var outString = File.ReadAllText(outFile).ReplaceLineEndings().Trim();
 
             var output = new DoubleOutput();
             var interpreter = new RpgInterpreter.RpgInterpreter(output);
 
             interpreter.InterpretString(inString);
 
-            var result = output.Read().ReplaceLineEndings();
+            var result = output.Read().ReplaceLineEndings().Trim();
 
             Assert.That(result, Is.EqualTo(outString));
 
