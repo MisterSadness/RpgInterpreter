@@ -8,9 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="example2.rpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="example.rpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

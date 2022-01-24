@@ -34,13 +34,9 @@ internal class ProgramTests
                 new Comma(), new LowercaseIdentifier("e2"), new Colon(), new UppercaseIdentifier("Entity"),
                 new CloseParen(), new UppercaseIdentifier("Unit"), new OpenBrace(),
                 new Set(), new LowercaseIdentifier("r1"), new AssignmentToken(), new DiceLiteral(1, 100),
-                new OpenParen(),
-                new CloseParen(),
                 new Minus(), new LowercaseIdentifier("e1"), new Access(), new UppercaseIdentifier("Strength"),
                 new Division(), new NaturalLiteral(10), new Semicolon(),
                 new Set(), new LowercaseIdentifier("r2"), new AssignmentToken(), new DiceLiteral(1, 100),
-                new OpenParen(),
-                new CloseParen(),
                 new Minus(), new LowercaseIdentifier("e2"), new Access(), new UppercaseIdentifier("Strength"),
                 new Division(), new NaturalLiteral(10), new Semicolon(),
                 new Set(), new LowercaseIdentifier("result"), new AssignmentToken(), new LowercaseIdentifier("r1"),
@@ -71,12 +67,12 @@ internal class ProgramTests
                     AstFactory.Block(NodeList.From(new IBlockInner[]
                     {
                         AstFactory.Assignment(AstFactory.Variable("r1"), AstFactory.SubtractionExp(
-                            AstFactory.DiceRoll(AstFactory.Dice(1, 100)),
+                            AstFactory.Dice(1, 100),
                             AstFactory.DivisionExp(AstFactory.FieldReference(AstFactory.Variable("e1"), "Strength"),
                                 AstFactory.Natural(10))
                         )),
                         AstFactory.Assignment(AstFactory.Variable("r2"), AstFactory.SubtractionExp(
-                            AstFactory.DiceRoll(AstFactory.Dice(1, 100)),
+                            AstFactory.Dice(1, 100),
                             AstFactory.DivisionExp(AstFactory.FieldReference(AstFactory.Variable("e2"), "Strength"),
                                 AstFactory.Natural(10))
                         )),

@@ -14,8 +14,8 @@ trait Strong for Entity {
 fun fight(e1: Entity, e2: Entity) Entity {
     print(e1.Name ++ " has " ++ getString(e1.Health) ++ " health\n");
     print(e2.Name ++ " has " ++ getString(e2.Health) ++ " health\n");
-    set r1 = 1d100() - e1.Strength / 10;
-    set r2 = 1d100() - e2.Strength / 10;
+    set r1 = roll(1d100) - e1.Strength / 10;
+    set r2 = roll(1d100) - e2.Strength / 10;
     set result = r1 - r2;
     set loser = if (result > 0)
         then e2
@@ -23,8 +23,9 @@ fun fight(e1: Entity, e2: Entity) Entity {
     set winner = if (result > 0)
         then e1
         else e2;
-    set loser.Health = loser.Health - result;
-    print(loser.Name ++ " lost " ++ getString(result) ++ " health.\n");
+    set damage = winner.Strength / 10;
+    set loser.Health = loser.Health - damage;
+    print(loser.Name ++ " lost " ++ getString(damage) ++ " health.\n");
     if (loser.Health <= 0)
         then {
             print(loser.Name ++ " has died!\n");
@@ -33,7 +34,7 @@ fun fight(e1: Entity, e2: Entity) Entity {
         }
         else {
             print("Fight continues!\n");
-            fight(e1, e2);
+            fight(winner, loser);
         };
 };
 

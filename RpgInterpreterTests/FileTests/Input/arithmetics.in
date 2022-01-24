@@ -1,0 +1,23 @@
+﻿set x = 3 - 2 - 1;
+print(getString(x)++"\n");
+
+set x = 3 - 2 - -1;
+print(getString(x)++"\n");
+
+set x = 2 + 2 * 2;
+print(getString(x)++"\n");
+
+set x = 2 * 2 + 2;
+print(getString(x)++"\n");
+
+set x = (2+2)*2;
+print(getString(x)++"\n");
+
+set x = (3 + 7) / (4 * 2);
+print(getString(x)++"\n");
+
+set x = 4 / 2 / 2;
+print(getString(x)++"\n");
+
+set x = 3 + 2 + -1;
+print(getString(x)++"\n");

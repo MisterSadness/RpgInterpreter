@@ -30,7 +30,7 @@ public abstract record Dice : Value
 public record SimpleDice(int Count, int Max) : Dice
 {
     public override string PrintableString => $"{Count}d{Max}";
-    public override int Roll() => Random.Next(Max);
+    public override int Roll() => Enumerable.Range(1, Count).Sum(_ => Random.Next(1, Max + 1));
 }
 
 public record CompoundDice(Func<int> RollFunc) : Dice
@@ -47,7 +47,7 @@ public record Unit : Value
 
 public record String(string Value) : Value
 {
-    public override string PrintableString => $"\"{Value.ReplaceLineEndings()}\"";
+    public override string PrintableString => $"{Value.ReplaceLineEndings()}";
     public override Type Type => new StringType();
 }
 

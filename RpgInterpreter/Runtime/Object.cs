@@ -13,9 +13,9 @@ public record Object(IImmutableDictionary<string, Value> Fields, ObjectType Obje
     {
         var sb = new StringBuilder();
         sb.AppendLine($"{ObjectType} {{");
-        foreach (var (name, value) in Fields)
+        foreach (var (name, value) in Fields.OrderBy(kvp => kvp.Key))
         {
-            sb.AppendLine($"{name}: {value.PrintableString}");
+            sb.AppendLine($"  {name}: {value.PrintableString}");
         }
 
         sb.AppendLine("}");

@@ -26,7 +26,6 @@ internal class AstFactory
     public static Block Block(NodeList<IBlockInner> inner, Expression last) => new(inner, last, Start, End);
     public static Assignment Assignment(IAssignable left, Expression right) => new(left, right, Start, End);
     public static VariableExp Variable(string name) => new(name, Start, End);
-    public static DiceRoll DiceRoll(Expression val) => new(val, Start, End);
     public static UnaryMinus UnaryMinus(Expression val) => new(val, Start, End);
     public static DiceExpression Dice(int count, int max) => new(count, max, Start, End);
     public static AdditionExp AdditionExp(Expression left, Expression right) => new(left, right, Start, End);

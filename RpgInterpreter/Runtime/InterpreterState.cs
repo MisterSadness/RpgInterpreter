@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 using RpgInterpreter.Parser.Grammar;
 using RpgInterpreter.Runtime.SemanticExceptions;
 using RpgInterpreter.TypeChecker;
@@ -41,7 +40,7 @@ public record InterpreterState(
     public static InterpreterState Initial(TypeMap typeMap) => new(
         ImmutableDictionary<string, Object>.Empty,
         ImmutableDictionary<string, Object>.Empty,
-        ImmutableDictionary<string, Function>.Empty.Add(Print.Name, Print),
+        ImmutableDictionary<string, Function>.Empty.Add(Print.Name, Print).Add(Roll.Name, Roll),
         ImmutableDictionary<string, Value>.Empty,
         typeMap.CurrentScope,
         typeMap.AllScopes,
@@ -54,7 +53,6 @@ public record InterpreterState(
 
     public InterpreterState EvaluateRoot(Root rootNode)
     {
-        // TODO Handle function, object and trait declarations in some smarter order
         var state = this;
         foreach (var statement in rootNode.Statements)
         {
@@ -67,9 +65,7 @@ public record InterpreterState(
     public static Function Print { get; } = new(
         body: state =>
         {
-            var stringParam = state.Variables.GetValueOrDefault("value") as String ??
-                              throw new InvalidOperationException(
-                                  $"Parameters should be already verified in {nameof(EvaluateFunctionInvocation)}");
+            var stringParam = state.Variables.GetValueOrDefault("value") as String ?? throw GetException();
             state.Output.Write(stringParam.Value);
             return new Unit();
         },
@@ -77,6 +73,19 @@ public record InterpreterState(
             new[] { new FunctionParameter("value", new StringType()) }.ToImmutableList(),
             new UnitType(),
             "print")
+    );
+
+    public static Function Roll { get; } = new(
+        state =>
+        {
+            var diceParam = state.Variables.GetValueOrDefault("value") as Dice ?? throw GetException();
+            var result = diceParam.Roll();
+            return new Integer(result);
+        },
+        new FunctionType(
+            new[] { new FunctionParameter("value", new DiceType()) }.ToImmutableList(),
+            new IntType(),
+            "roll")
     );
 
     public InterpreterState EvaluateFunctionDeclaration(FunctionDeclaration functionDeclaration)
@@ -290,7 +299,6 @@ public record InterpreterState(
         {
             DiceExpression d => new SimpleDice(d.Count, d.Max),
             Natural n => new Integer(n.Value),
-            DiceRoll dr => EvaluateRoll(dr),
             BooleanExpression be => new Boolean(be.Value),
             StringExpression se => new String(se.Value),
             BinaryOperation bo => EvaluateBinaryOperation(bo),
@@ -316,7 +324,7 @@ public record InterpreterState(
         }
 
         var anonymousType = new ObjectDeclaration(
-            "anonymous" + (AnonymousObjectCount + 1),
+            "anonymous",
             oc.Type,
             oc.Traits,
             new FieldList(new NodeList<FieldDeclaration>(Enumerable.Empty<FieldDeclaration>()), oc.End, oc.End),
@@ -411,18 +419,6 @@ public record InterpreterState(
         return variable.Fields[reference.FieldName];
     }
 
-    public Integer EvaluateRoll(DiceRoll roll)
-    {
-        var innerResult = EvaluateExpression(roll.Dice);
-
-        if (innerResult is Dice d)
-        {
-            return new Integer(d.Roll());
-        }
-
-        throw GetException();
-    }
-
     public Value EvaluateBinaryOperation(BinaryOperation binaryOperation)
     {
         var left = EvaluateExpression(binaryOperation.Left);
@@ -448,8 +444,7 @@ public record InterpreterState(
         };
     }
 
-    public Value EvaluateNumericOperation(Value left, Value right, Func<int, int, int> operation,
-        [CallerMemberName] string operationName = "")
+    public Value EvaluateNumericOperation(Value left, Value right, Func<int, int, int> operation)
     {
         return (left, right) switch
         {

@@ -12,7 +12,7 @@ public class TypeChecker
 
 public record TypeCheckResult<T>(T Type, TypeMap TypeMap) : ITypeCheckResult<T> where T : Type;
 
-public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope> AllScopes, int AnonymousObjectCount)
+public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope> AllScopes)
 {
     public static TypeMap WithBuildIns;
 
@@ -28,9 +28,14 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
             new FunctionType(ImmutableList.Create(new FunctionParameter("value", new StringType())), new UnitType(),
                 "print")
         );
+        var roll = new KeyValuePair<string, Type>(
+            "roll",
+            new FunctionType(ImmutableList.Create(new FunctionParameter("value", new DiceType())), new IntType(),
+                "roll")
+        );
         WithBuildIns = new TypeMap(
-            new Scope(ImmutableDictionary.CreateRange(builtinTypes.Append(print))),
-            ImmutableDictionary<IWithScope, Scope>.Empty, 0
+            new Scope(ImmutableDictionary.CreateRange(builtinTypes.Append(print).Append(roll))),
+            ImmutableDictionary<IWithScope, Scope>.Empty
         );
     }
 
@@ -103,8 +108,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
         return new TypeMap
         (
             CurrentScope.Add(functionDeclaration.Name, functionType),
-            bodyMap.AllScopes.Add(functionDeclaration, bodyMap.CurrentScope),
-            bodyMap.AnonymousObjectCount
+            bodyMap.AllScopes.Add(functionDeclaration, bodyMap.CurrentScope)
         ).WithUnitType();
     }
 
@@ -147,7 +151,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
             }
         }
 
-        return new TypeMap(CurrentScope, finalTypeMap.AllScopes, finalTypeMap.AnonymousObjectCount).WithType(
+        return new TypeMap(CurrentScope, finalTypeMap.AllScopes).WithType(
             function.ReturnType);
     }
 
@@ -178,6 +182,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
     {
         var typeMap = this;
         var baseTypes = new List<ObjectType>();
+        var fieldDict = ImmutableDictionary<string, Type>.Empty;
 
         if (td.Base is not null)
         {
@@ -185,9 +190,9 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
                            throw new UnrecognizedTypeException(td.Base, new Positioned(td.Start, td.Fields.Start));
             typeMap = typeMap.WithBaseObjectFields(baseType, td);
             baseTypes.Add(baseType);
+            fieldDict = fieldDict.AddRange(baseType.FieldTypes);
         }
 
-        var fieldDict = new Dictionary<string, Type>();
         foreach (var field in td.Fields.Fields)
         {
             var name = field.Name;
@@ -202,15 +207,21 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
             {
                 CurrentScope = typeMap.CurrentScope.Add($"this.{name}", fieldResult.Type)
             };
-            fieldDict.Add(name, fieldResult.Type);
+
+            if (fieldDict.GetValueOrDefault("name") is { } existingType &&
+                !fieldResult.Type.IsAssignableTo(existingType))
+            {
+                throw new TypeInferenceFailedException(existingType, fieldResult.Type, field);
+            }
+
+            fieldDict = fieldDict.SetItem(name, fieldResult.Type);
         }
 
-        var trait = new ObjectType(fieldDict.ToImmutableDictionary(), td.Name, ImmutableHashSet.CreateRange(baseTypes));
+        var objectType = new ObjectType(fieldDict, td.Name, baseTypes.ToImmutableHashSet());
 
         return new TypeMap(
-            CurrentScope.Add(trait.TypeName, trait),
-            typeMap.AllScopes.Add(td, typeMap.CurrentScope),
-            typeMap.AnonymousObjectCount
+            CurrentScope.Add(objectType.TypeName, objectType),
+            typeMap.AllScopes.Add(td, typeMap.CurrentScope)
         ).WithUnitType();
     }
 
@@ -218,6 +229,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
     {
         var typeMap = this;
         var baseTypes = new List<ObjectType>();
+
 
         if (od.Base is not null)
         {
@@ -287,8 +299,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
 
         return new TypeMap(
             CurrentScope.Add(objectType.TypeName, objectType),
-            typeMap.AllScopes.Add(od, typeMap.CurrentScope.Add(objectType.TypeName, objectType)),
-            typeMap.AnonymousObjectCount
+            typeMap.AllScopes.Add(od, typeMap.CurrentScope.Add(objectType.TypeName, objectType))
         ).WithUnitType();
     }
 
@@ -310,13 +321,11 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
 
                 if (variableType is TypedListType && rightSide.Type is EmptyListType)
                 {
-                    return new TypeMap(CurrentScope, rightSide.TypeMap.AllScopes,
-                        rightSide.TypeMap.AnonymousObjectCount).WithUnitType();
+                    return new TypeMap(CurrentScope, rightSide.TypeMap.AllScopes).WithUnitType();
                 }
             }
 
-            return new TypeMap(CurrentScope.SetItem(variable.Name, rightSide.Type), rightSide.TypeMap.AllScopes,
-                    rightSide.TypeMap.AnonymousObjectCount)
+            return new TypeMap(CurrentScope.SetItem(variable.Name, rightSide.Type), rightSide.TypeMap.AllScopes)
                 .WithUnitType();
         }
 
@@ -358,13 +367,11 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
 
                 if (variableType is TypedListType && rightSide.Type is EmptyListType)
                 {
-                    return new TypeMap(CurrentScope, rightSide.TypeMap.AllScopes,
-                        rightSide.TypeMap.AnonymousObjectCount).WithUnitType();
+                    return new TypeMap(CurrentScope, rightSide.TypeMap.AllScopes).WithUnitType();
                 }
             }
 
-            return new TypeMap(CurrentScope.SetItem(field.FieldName, rightSide.Type), rightSide.TypeMap.AllScopes,
-                    rightSide.TypeMap.AnonymousObjectCount)
+            return new TypeMap(CurrentScope.SetItem(field.FieldName, rightSide.Type), rightSide.TypeMap.AllScopes)
                 .WithUnitType();
         }
 
@@ -404,7 +411,6 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
         {
             DiceExpression => WithType(new DiceType()),
             Natural => WithType(new IntType()),
-            DiceRoll dr => EvaluateRoll(dr),
             BooleanExpression => WithType(new BooleanType()),
             StringExpression => WithType(new StringType()),
             BinaryOperation bo => EvaluateBinaryOperation(bo),
@@ -436,7 +442,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
         }
 
         var anonymousType = new ObjectDeclaration(
-            "anonymous" + (AnonymousObjectCount + 1),
+            "anonymous",
             oc.Type,
             oc.Traits,
             new FieldList(new NodeList<FieldDeclaration>(Enumerable.Empty<FieldDeclaration>()), oc.End, oc.End),
@@ -444,10 +450,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
             oc.End
         );
 
-        var withAnonType = EvaluateObjectDeclaration(anonymousType).TypeMap with
-        {
-            AnonymousObjectCount = AnonymousObjectCount + 1
-        };
+        var withAnonType = EvaluateObjectDeclaration(anonymousType).TypeMap;
 
         var creation = new ObjectCreation(
             anonymousType.Name,
@@ -564,18 +567,6 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
                           throw new UnassignedVariableException(name, reference);
 
         return WithType(deducedType);
-    }
-
-    public ITypeCheckResult<Type> EvaluateRoll(DiceRoll roll)
-    {
-        var innerResult = EvaluateExpression(roll.Dice);
-
-        if (innerResult.Type is DiceType)
-        {
-            return innerResult.WithType(new IntType());
-        }
-
-        throw new NonDiceRollException(roll, innerResult.Type);
     }
 
     public ITypeCheckResult<Type> EvaluateBinaryOperation(BinaryOperation binaryOperation)

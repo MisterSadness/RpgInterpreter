@@ -27,11 +27,6 @@ public partial class SourceState
             _ => throw new ParsingException($"Expected expression at {CurrentPosition.Formatted}.")
         };
 
-        if (parsedExpression.Source.PeekOrDefault() is OpenParen)
-        {
-            parsedExpression = parsedExpression.Source.ParseRoll(parsedExpression.Result);
-        }
-
         var newPrecedence = currentPrecedence;
         IParseResult<BinaryOperation>? parsedOperation;
         do

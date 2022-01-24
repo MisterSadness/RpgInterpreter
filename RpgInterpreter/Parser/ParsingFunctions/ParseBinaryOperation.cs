@@ -32,23 +32,23 @@ public partial class SourceState
         // continue
         IParseResult<Operator>? operatorState = PeekOrDefault() switch
         {
-            Multiplication => ParseToken<Multiplication>(),
-            Division => ParseToken<Division>(),
+            Multiplication when currentPrecedence < Precedence.Multiplication => ParseToken<Multiplication>(),
+            Division when currentPrecedence < Precedence.Multiplication => ParseToken<Division>(),
 
-            Concatenation when currentPrecedence <= Precedence.Concatenation => ParseToken<Concatenation>(),
+            Concatenation when currentPrecedence < Precedence.Concatenation => ParseToken<Concatenation>(),
 
-            Addition when currentPrecedence <= Precedence.Addition => ParseToken<Addition>(),
-            Minus when currentPrecedence <= Precedence.Addition => ParseToken<Minus>(),
+            Addition when currentPrecedence < Precedence.Addition => ParseToken<Addition>(),
+            Minus when currentPrecedence < Precedence.Addition => ParseToken<Minus>(),
 
-            Equality when currentPrecedence <= Precedence.Comparison => ParseToken<Equality>(),
-            Inequality when currentPrecedence <= Precedence.Comparison => ParseToken<Inequality>(),
-            Less when currentPrecedence <= Precedence.Comparison => ParseToken<Less>(),
-            Greater when currentPrecedence <= Precedence.Comparison => ParseToken<Greater>(),
-            LessOrEqual when currentPrecedence <= Precedence.Comparison => ParseToken<LessOrEqual>(),
-            GreaterOrEqual when currentPrecedence <= Precedence.Comparison => ParseToken<GreaterOrEqual>(),
+            Equality when currentPrecedence < Precedence.Comparison => ParseToken<Equality>(),
+            Inequality when currentPrecedence < Precedence.Comparison => ParseToken<Inequality>(),
+            Less when currentPrecedence < Precedence.Comparison => ParseToken<Less>(),
+            Greater when currentPrecedence < Precedence.Comparison => ParseToken<Greater>(),
+            LessOrEqual when currentPrecedence < Precedence.Comparison => ParseToken<LessOrEqual>(),
+            GreaterOrEqual when currentPrecedence < Precedence.Comparison => ParseToken<GreaterOrEqual>(),
 
-            BooleanAnd when currentPrecedence <= Precedence.Boolean => ParseToken<BooleanAnd>(),
-            BooleanOr when currentPrecedence <= Precedence.Boolean => ParseToken<BooleanOr>(),
+            BooleanAnd when currentPrecedence < Precedence.Boolean => ParseToken<BooleanAnd>(),
+            BooleanOr when currentPrecedence < Precedence.Boolean => ParseToken<BooleanOr>(),
             _ => null
         };
 

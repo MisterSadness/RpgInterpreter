@@ -1,6 +1,4 @@
-﻿using RpgInterpreter.TypeChecker;
-
-namespace RpgInterpreter.Parser.Grammar;
+﻿namespace RpgInterpreter.Parser.Grammar;
 
 public abstract record Expression(Position Start, Position End) : Node(Start, End), IBlockInner;
 
@@ -47,8 +45,6 @@ public record FieldReference
 
 public record FunctionInvocation
     (string FunctionName, IEnumerable<Expression> Arguments, Position Start, Position End) : Reference(Start, End);
-
-public record DiceRoll(Expression Dice, Position Start, Position End) : Expression(Start, End);
 
 public enum Precedence
 {
