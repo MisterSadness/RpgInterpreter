@@ -2,7 +2,7 @@
 Kod źródłowy interpretera wykonanego na potrzeby przedmioty Metody Translacji.
 
 ## Technologia
-Interpreter został napisany w języku C# 9 (framework .NET 5.0).
+Interpreter został napisany w języku C# 9 (framework .NET 6.0).
 
 ## Uruchomienie
 Interpreter najprościej uruchomić
