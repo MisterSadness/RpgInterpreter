@@ -6,39 +6,37 @@ using RpgInterpreter.Parser;
 using RpgInterpreter.Parser.Grammar;
 using RpgInterpreter.Runtime;
 
-namespace RpgInterpreter
+namespace RpgInterpreter;
+
+public class RpgInterpreter
 {
-    public class RpgInterpreter
+    public RpgInterpreter(IOutput output) => Output = output;
+    public RpgInterpreter() => Output = new ConsoleOutput();
+    public IOutput Output { get; }
+
+    public void InterpretString(string sourceCodeString)
     {
-        public RpgInterpreter(IOutput output) => Output = output;
-        public RpgInterpreter() => Output = new ConsoleOutput();
-
-        public void InterpretString(string sourceCodeString)
+        var errorLocator = new ErrorAreaPrinter(sourceCodeString);
+        var handler = new RpgInterpreterExceptionHandler(errorLocator, Output);
+        handler.RunAndHandle(() =>
         {
-            var errorLocator = new ErrorAreaPrinter(sourceCodeString);
-            var handler = new RpgInterpreterExceptionHandler(errorLocator, Output);
-            handler.RunAndHandle(() =>
-            {
-                var stringSource = new StringSource(sourceCodeString);
-                var lexer = new TrackingRpgLexer();
-                var lexed = lexer.Tokenize(stringSource);
+            var stringSource = new StringSource(sourceCodeString);
+            var lexer = new TrackingRpgLexer();
+            var lexed = lexer.Tokenize(stringSource);
 
-                var parser = new CoolerParser();
-                var parsed = parser.Parse(lexed);
+            var parser = new CoolerParser();
+            var parsed = parser.Parse(lexed);
 
-                InterpretAst(parsed);
-            });
-        }
+            InterpretAst(parsed);
+        });
+    }
 
-        public void InterpretAst(Root root)
-        {
-            var typeChecker = new TypeChecker.TypeChecker();
-            var typeMap = typeChecker.AnalyzeTypes(root);
+    public void InterpretAst(Root root)
+    {
+        var typeChecker = new TypeChecker.TypeChecker();
+        var typeMap = typeChecker.AnalyzeTypes(root);
 
-            var state = InterpreterState.Initial(typeMap) with { Output = Output };
-            state.EvaluateRoot(root);
-        }
-
-        public IOutput Output { get; }
+        var state = InterpreterState.Initial(typeMap) with { Output = Output };
+        state.EvaluateRoot(root);
     }
 }

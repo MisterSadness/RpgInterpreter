@@ -2,7 +2,7 @@
 
 if (args.Length == 1 && File.Exists(sourcePath))
 {
-    var sourceCodeString = File.ReadAllText(sourcePath);
+    var sourceCodeString = File.ReadAllText(sourcePath).ReplaceLineEndings();
 
     var interpreter = new RpgInterpreter.RpgInterpreter();
 
