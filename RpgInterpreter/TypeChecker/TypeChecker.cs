@@ -21,7 +21,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
         var builtinTypes = new Type[]
         {
             new UnitType(), new StringType(), new BooleanType(), new IntType(),
-            new DiceType() // TODO Generic list types?
+            new DiceType()
         }.Select(t => new KeyValuePair<string, Type>(t.ToString(), t));
         var print = new KeyValuePair<string, Type>(
             "print",
@@ -61,7 +61,6 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
 
     public ITypeCheckResult<UnitType> EvaluateRoot(Root rootNode)
     {
-        // TODO Handle function, object and trait declarations in some smarter order
         var state = this;
         foreach (var statement in rootNode.Statements)
         {

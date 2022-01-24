@@ -1,32 +1,10 @@
 ﻿using System.Collections.Immutable;
 using RpgInterpreter.Parser.Grammar;
+using RpgInterpreter.Runtime.RuntimeExceptions;
 using RpgInterpreter.Runtime.SemanticExceptions;
 using RpgInterpreter.TypeChecker;
-using Type = RpgInterpreter.TypeChecker.Type;
 
 namespace RpgInterpreter.Runtime;
-
-public record ObjectConstructor;
-
-public record InheritingObjectConstructor : ObjectConstructor;
-
-public class TypeCheckShouldHaveFailedException : Exception
-{
-    public TypeCheckShouldHaveFailedException() : base("Type check should be run before interpretation.") { }
-}
-
-public static class TypeExtensions
-{
-    private static Exception GetException() => new TypeCheckShouldHaveFailedException();
-
-    public static FunctionType AsFunctionType(this Type type) => type as FunctionType ?? throw GetException();
-    public static IntType AsIntType(this Type type) => type as IntType ?? throw GetException();
-    public static BooleanType AsBooleanType(this Type type) => type as BooleanType ?? throw GetException();
-    public static UnitType AsUnitType(this Type type) => type as UnitType ?? throw GetException();
-    public static StringType AsStringType(this Type type) => type as StringType ?? throw GetException();
-    public static ObjectType AsObjectType(this Type type) => type as ObjectType ?? throw GetException();
-    public static ListType AsListType(this Type type) => type as ListType ?? throw GetException();
-}
 
 public record InterpreterState(
     IImmutableDictionary<string, Object> Objects,
@@ -47,9 +25,7 @@ public record InterpreterState(
         new ConsoleOutput()
     );
 
-    public int AnonymousObjectCount { get; init; }
-
-    private static Exception GetException() => new TypeCheckShouldHaveFailedException();
+    private static Exception GetException() => new InterpreterImplementationException();
 
     public InterpreterState EvaluateRoot(Root rootNode)
     {
@@ -116,8 +92,7 @@ public record InterpreterState(
             return EvaluateGetString(functionInvocation);
         }
 
-        var function = Functions.GetValueOrDefault(functionInvocation.FunctionName) ??
-                       throw new UnrecognizedFunctionNameException(functionInvocation);
+        var function = Functions[functionInvocation.FunctionName];
 
         var passedParameters = functionInvocation.Arguments.Select(EvaluateExpression).ToImmutableList();
 
@@ -136,8 +111,7 @@ public record InterpreterState(
 
     public String EvaluateGetString(FunctionInvocation functionInvocation)
     {
-        var argument = functionInvocation.Arguments.SingleOrDefault() ??
-                       throw new WrongParameterCountException(functionInvocation, 1);
+        var argument = functionInvocation.Arguments.Single();
 
         var evaluated = EvaluateExpression(argument);
 
@@ -310,7 +284,7 @@ public record InterpreterState(
             Block b => EvaluateBlock(b),
             ObjectCreation oc => EvaluateObjectCreation(oc),
             Reference r => EvaluateReference(r),
-            _ => throw new NotImplementedException()
+            _ => throw GetException()
         };
 
         return value;
@@ -333,7 +307,7 @@ public record InterpreterState(
         );
 
         var withAnonType =
-            (this with { CurrentScope = AllScopes[anonymousType], AnonymousObjectCount = AnonymousObjectCount + 1 })
+            (this with { CurrentScope = AllScopes[anonymousType] })
             .EvaluateObjectDeclaration(anonymousType);
 
         var creation = new ObjectCreation(
@@ -400,7 +374,7 @@ public record InterpreterState(
             Base b => throw new ObjectSelfReferenceIsNotAllowed(b),
             This t => throw new ObjectSelfReferenceIsNotAllowed(t),
             FieldReference f => EvaluateFieldReference(f),
-            _ => throw new ArgumentOutOfRangeException(nameof(reference), reference, "Unrecognized reference type.")
+            _ => throw GetException()
         };
 
         return value;
@@ -412,7 +386,8 @@ public record InterpreterState(
         {
             Base => "base",
             This => "this",
-            VariableExp v => v.Name
+            VariableExp v => v.Name,
+            _ => throw GetException()
         };
         var variable = Variables[variableName] as Object ?? throw GetException();
 
@@ -439,8 +414,7 @@ public record InterpreterState(
             GreaterThanExp => EvaluateGreaterThan(left, right),
             LessOrEqualThanExp => EvaluateLessOrEqual(left, right),
             GreaterOrEqualThanExp => EvaluateGreaterOrEqual(left, right),
-            _ => throw new ArgumentOutOfRangeException(nameof(binaryOperation), binaryOperation,
-                "Unrecognized binary operation type.")
+            _ => throw GetException()
         };
     }
 
