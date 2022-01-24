@@ -5,9 +5,8 @@ namespace RpgInterpreterTests.Utils;
 
 internal class AstFactory
 {
-    public static Position Start { get; set; } = new(0, 0);
-    public static Position End { get; set; } = new(0, 0);
-
+    private static Position Start { get; } = new(0, 0);
+    private static Position End { get; } = new(0, 0);
     public static Root Root(NodeList<Statement> statements) => new(statements, Start, End);
 
     public static FunctionDeclaration FunctionDeclaration(string name, FunctionParameterList parameterList,
@@ -16,9 +15,6 @@ internal class AstFactory
 
     public static FunctionParameterList FunctionParameterList(NodeList<FunctionParameterDeclaration> parameters) =>
         new(parameters, Start, End);
-
-    public static FunctionInvocation FunctionInvocation(string name, IEnumerable<Expression> parameters) =>
-        new(name, parameters, Start, End);
 
     public static FunctionParameterDeclaration FunctionParameter(string name, string type) =>
         new(name, type, Start, End);
@@ -37,8 +33,6 @@ internal class AstFactory
     public static DivisionExp DivisionExp(Expression left, Expression right) => new(left, right, Start, End);
     public static FieldReference FieldReference(NameReference obj, string field) => new(obj, field, Start, End);
     public static Natural Natural(int value) => new(value, Start, End);
-
-    public static StringExpression StringExpression(string value) => new(value, Start, End);
 
     public static IfExpression If(Expression condition, Expression onTrue, Expression onFalse) =>
         new(condition, onTrue, onFalse, Start, End);

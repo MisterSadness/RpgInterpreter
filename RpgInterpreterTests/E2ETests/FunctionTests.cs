@@ -5,7 +5,7 @@ namespace RpgInterpreterTests.E2ETests;
 
 public class FunctionTests
 {
-    private static IEnumerable<E2ETestCase> _printPrograms = new[]
+    private static readonly IEnumerable<E2ETestCase> _printPrograms = new[]
     {
         new E2ETestCase(
             "fun factorial(i: Int) Int { if i == 0 then 1 else i * factorial(i-1); }; print(getString(factorial(5)));",

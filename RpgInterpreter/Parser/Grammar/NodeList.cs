@@ -5,12 +5,12 @@ namespace RpgInterpreter.Parser.Grammar;
 
 public static class NodeList
 {
-    public static NodeList<T> From<T>(IEnumerable<T> nodes) => new(nodes);
+    public static NodeList<T> From<T>(IEnumerable<T> nodes) where T : notnull => new(nodes);
 
-    public static NodeList<T> Empty<T>() => new(Enumerable.Empty<T>());
+    public static NodeList<T> Empty<T>() where T : notnull => new(Enumerable.Empty<T>());
 }
 
-public sealed class NodeList<T> : IReadOnlyCollection<T>, IEquatable<NodeList<T>>
+public sealed class NodeList<T> : IReadOnlyCollection<T>, IEquatable<NodeList<T>> where T : notnull
 {
     private readonly IReadOnlyCollection<T> _nodes;
 
@@ -49,7 +49,7 @@ public sealed class NodeList<T> : IReadOnlyCollection<T>, IEquatable<NodeList<T>
 
         foreach (var node in _nodes)
         {
-            sb.Append(node.ToString());
+            sb.Append(node);
         }
 
         return sb.ToString();

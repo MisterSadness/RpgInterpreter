@@ -27,9 +27,9 @@ public record TypedList(IImmutableList<Value> Elements, Type ElementType) : Valu
     private string ConstructPrintableString()
     {
         var sb = new StringBuilder();
-        sb.Append("[");
+        sb.Append('[');
         sb.AppendJoin(", ", Elements.Select(e => e.PrintableString));
-        sb.Append("]");
+        sb.Append(']');
         return sb.ToString();
     }
 }

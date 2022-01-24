@@ -22,7 +22,7 @@ public record Integer(int Value) : Value
 
 public abstract record Dice : Value
 {
-    protected static Random Random = new();
+    protected static readonly Random Random = new();
     public override Type Type => new DiceType();
     public abstract int Roll();
 }
@@ -53,6 +53,6 @@ public record String(string Value) : Value
 
 public record Boolean(bool Value) : Value
 {
-    public override string PrintableString => Value.ToString();
+    public override string PrintableString => Value.ToString().ToLower();
     public override Type Type => new BooleanType();
 }

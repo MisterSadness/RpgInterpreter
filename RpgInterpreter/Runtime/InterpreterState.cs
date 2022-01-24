@@ -346,12 +346,7 @@ public record InterpreterState(
     {
         var condition = (Boolean)EvaluateExpression(ifExpression.Condition);
 
-        if (condition.Value)
-        {
-            return EvaluateExpression(ifExpression.TrueValue);
-        }
-
-        return EvaluateExpression(ifExpression.FalseValue);
+        return EvaluateExpression(condition.Value ? ifExpression.TrueValue : ifExpression.FalseValue);
     }
 
     private Value EvaluateUnaryMinus(UnaryMinus um)

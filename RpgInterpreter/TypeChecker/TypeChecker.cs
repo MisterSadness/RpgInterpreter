@@ -14,7 +14,7 @@ public record TypeCheckResult<T>(T Type, TypeMap TypeMap) : ITypeCheckResult<T> 
 
 public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope> AllScopes)
 {
-    public static TypeMap WithBuildIns;
+    public static TypeMap WithBuildIns { get; }
 
     static TypeMap()
     {
@@ -293,8 +293,7 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
             fieldDict = fieldDict.Add(name, typeResult.Type);
         }
 
-        var objectType = new ObjectType(fieldDict.ToImmutableDictionary(), od.Name,
-            ImmutableHashSet.CreateRange(baseTypes));
+        var objectType = new ObjectType(fieldDict, od.Name, ImmutableHashSet.CreateRange(baseTypes));
 
         return new TypeMap(
             CurrentScope.Add(objectType.TypeName, objectType),
@@ -463,21 +462,12 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
     private ITypeCheckResult<Type> EvaluateBlock(Block block)
     {
         var blockInner = this;
-        foreach (var inner in block.Inner)
+        blockInner = block.Inner.Aggregate(blockInner, (current, inner) => inner switch
         {
-            if (inner is Expression e)
-            {
-                blockInner = blockInner.EvaluateExpression(e).TypeMap;
-            }
-            else if (inner is Assignment a)
-            {
-                blockInner = blockInner.EvaluateAssignment(a).TypeMap;
-            }
-            else
-            {
-                throw new InvalidOperationException($"{inner} is not a valid statement inside a block.");
-            }
-        }
+            Expression e => current.EvaluateExpression(e).TypeMap,
+            Assignment a => current.EvaluateAssignment(a).TypeMap,
+            _ => throw new InvalidOperationException($"{inner} is not a valid statement inside a block.")
+        });
 
         var returnType = blockInner.EvaluateExpression(block.Last);
 
