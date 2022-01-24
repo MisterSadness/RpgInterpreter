@@ -156,10 +156,12 @@ public record TypeMap(Scope CurrentScope, IImmutableDictionary<IWithScope, Scope
 
     public ITypeCheckResult<StringType> EvaluateGetString(FunctionInvocation functionInvocation)
     {
-        var _ = functionInvocation.Arguments.SingleOrDefault() ??
-                throw new WrongParameterCountException(functionInvocation, 1);
+        var parameter = functionInvocation.Arguments.SingleOrDefault() ??
+                        throw new WrongParameterCountException(functionInvocation, 1);
 
-        return WithType(new StringType());
+        var evaluatedParameter = EvaluateExpression(parameter);
+
+        return evaluatedParameter.WithType(new StringType());
     }
 
     public ITypeCheckResult<UnitType> EvaluateStatement(Statement statement)
