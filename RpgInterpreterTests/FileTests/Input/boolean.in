@@ -3,8 +3,9 @@
 		print("negative\n")
 	else if i < 5 then 
 		print("small\n")
-	else 
+	else {
 		print("big\n");
+	};
 };
 
 magicFunction(-1);

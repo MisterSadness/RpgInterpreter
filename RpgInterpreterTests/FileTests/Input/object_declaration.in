@@ -26,12 +26,15 @@ trait Powerless for Entity {
 };
 
 fun foo(x: Powerless) Unit {
-    print(x.Name ++ " has " ++ getString(x.Strength) ++ " Strength! \n");
+    print(x.Name ++ " has " ++ getString(x.Strength) ++ " Strength!\n");
+    set y = Entity with Nimble;
+    print(y.Name ++ " has " ++ getString(y.Strength) ++ " Strength!\n");
 };
 
 set stackedTraits = Entity with Strong and Nimble and Powerless;
 
 print(getString(stackedTraits.Strength)++"\n");
+foo(stackedTraits);
 
 trait WithPowerLevel {
     PowerLevel: 1
