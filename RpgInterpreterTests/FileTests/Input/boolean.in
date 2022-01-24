@@ -1,0 +1,31 @@
+﻿fun magicFunction(i: Int) Unit {
+	if i < 0 then 
+		print("negative\n")
+	else if i < 5 then 
+		print("small\n")
+	else 
+		print("big\n");
+};
+
+magicFunction(-1);
+magicFunction(2);
+magicFunction(5);
+
+set x = true && false;
+print(getString(x)++"\n");
+
+set x = true || false;
+print(getString(x)++"\n");
+
+set a = 3;
+set b = 5;
+set c = 7d14;
+
+set x = a < b;
+print(getString(x)++"\n");
+
+set x = a + 3 < b;
+print(getString(x)++"\n");
+
+set x = roll(c) >= 7;
+print(getString(x)++"\n");
