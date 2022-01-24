@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using RpgInterpreter;
+using RpgInterpreter.Output;
 
 namespace RpgInterpreterTests.E2ETests;
 

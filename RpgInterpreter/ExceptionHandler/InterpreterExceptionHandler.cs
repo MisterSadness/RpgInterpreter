@@ -1,4 +1,5 @@
-﻿using RpgInterpreter.Runtime.SemanticExceptions;
+﻿using RpgInterpreter.Output;
+using RpgInterpreter.Runtime.SemanticExceptions;
 
 namespace RpgInterpreter.ExceptionHandler;
 

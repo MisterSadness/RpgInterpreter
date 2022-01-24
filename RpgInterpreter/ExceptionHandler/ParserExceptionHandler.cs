@@ -1,4 +1,5 @@
-﻿using RpgInterpreter.Parser.ParsingExceptions;
+﻿using RpgInterpreter.Output;
+using RpgInterpreter.Parser.ParsingExceptions;
 
 namespace RpgInterpreter.ExceptionHandler;
 

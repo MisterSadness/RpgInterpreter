@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using RpgInterpreter.Output;
 
 namespace RpgInterpreter.ExceptionHandler;
 

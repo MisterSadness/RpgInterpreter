@@ -1,6 +1,7 @@
 ﻿using RpgInterpreter.ExceptionHandler;
 using RpgInterpreter.Lexer;
 using RpgInterpreter.Lexer.Sources;
+using RpgInterpreter.Output;
 using RpgInterpreter.Parser;
 using RpgInterpreter.Parser.Grammar;
 using RpgInterpreter.Runtime;

@@ -1,4 +1,5 @@
 ﻿using RpgInterpreter.Lexer.LexingErrors;
+using RpgInterpreter.Output;
 
 namespace RpgInterpreter.ExceptionHandler;
 

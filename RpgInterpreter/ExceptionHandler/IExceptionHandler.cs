@@ -1,4 +1,6 @@
-﻿namespace RpgInterpreter.ExceptionHandler;
+﻿using RpgInterpreter.Output;
+
+namespace RpgInterpreter.ExceptionHandler;
 
 public interface IExceptionHandler
 {
