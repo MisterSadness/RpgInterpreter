@@ -1,6 +1,6 @@
 ﻿using Optional;
 
-namespace RpgInterpreter;
+namespace RpgInterpreter.Lexer;
 
 // Has to be struct because nullable reference types and value types are not compatible with each other
 public interface ISource<T>
