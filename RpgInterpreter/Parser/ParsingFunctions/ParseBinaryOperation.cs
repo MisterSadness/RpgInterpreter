@@ -22,14 +22,6 @@ public partial class SourceState
     public IParseResult<BinaryOperation>? ParseBinaryOperation(Expression left, Precedence currentPrecedence)
     {
         var start = left.Start;
-        // 2 * 2 - 4
-        // prec(*) > prec(-)
-        // stop after 2 * 2
-        // * 4
-
-        // 2 - 2 * 4
-        // prec(-) <= prec(*)
-        // continue
         IParseResult<Operator>? operatorState = PeekOrDefault() switch
         {
             Multiplication when currentPrecedence < Precedence.Multiplication => ParseToken<Multiplication>(),

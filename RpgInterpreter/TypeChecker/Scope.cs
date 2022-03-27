@@ -9,23 +9,11 @@ public record Scope(IImmutableDictionary<string, Type> Types) : IEnumerable<KeyV
 
     IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable)Types).GetEnumerator();
 
-    public int Count => Types.Count;
-
-    public bool ContainsKey(string key) => Types.ContainsKey(key);
-
     public bool TryGetValue(string key, out Type? value) => Types.TryGetValue(key, out value);
 
     public Type this[string key] => Types[key];
 
-    public IEnumerable<string> Keys => Types.Keys;
-
-    public IEnumerable<Type> Values => Types.Values;
-
     public Scope Add(string key, Type value) => new(Types.Add(key, value));
-
-    public Scope AddRange(IEnumerable<KeyValuePair<string, Type>> pairs) => new(Types.AddRange(pairs));
-
-    public bool TryGetKey(string equalKey, out string actualKey) => Types.TryGetKey(equalKey, out actualKey);
 
     public Type GetTypeOf(string key) =>
         GetValueOrDefault(key) ?? throw new InvalidOperationException($"No type for {key} in current scope.");

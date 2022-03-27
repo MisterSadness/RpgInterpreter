@@ -1,6 +1,4 @@
-﻿using RpgInterpreter.TypeChecker;
-
-namespace RpgInterpreter.Parser.Grammar;
+﻿namespace RpgInterpreter.Parser.Grammar;
 
 public abstract record Statement(Position Start, Position End) : Node(Start, End);
 
