@@ -1,8 +1,6 @@
 # RpgInterpreter
 Interpreter of a simple scripting language, written from scratch.
 
-Kod źródłowy interpretera wykonanego na potrzeby przedmioty Metody Translacji.
-
 ## Tech stack
 Written in C# 9 (.NET 6.0). The only outside dependency is the [`Optional` library](https://github.com/nlkl/Optional), used primarily in the lexer part of the project,
 
