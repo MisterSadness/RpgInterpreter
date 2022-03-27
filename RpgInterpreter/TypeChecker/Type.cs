@@ -40,7 +40,7 @@ public record DiceType : Type
     public override string ToString() => "Dice";
 }
 
-public abstract record ListType : Type { }
+public abstract record ListType : Type;
 
 public record EmptyListType(IPositioned Positioned) : ListType
 {

@@ -6,8 +6,6 @@ namespace RpgInterpreter.Parser.Grammar;
 public static class NodeList
 {
     public static NodeList<T> From<T>(IEnumerable<T> nodes) where T : notnull => new(nodes);
-
-    public static NodeList<T> Empty<T>() where T : notnull => new(Enumerable.Empty<T>());
 }
 
 public sealed class NodeList<T> : IReadOnlyCollection<T>, IEquatable<NodeList<T>> where T : notnull
