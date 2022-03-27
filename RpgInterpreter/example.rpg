@@ -41,6 +41,7 @@ fun fight(e1: Entity, e2: Entity) Entity {
 set fighter = Entity with Strong;
 set fighter.Name = "Marcus";
 set bandit = Entity;
-set bandit.Name = "Otto";
+set bandit.Name = "Otto the Highwayman";
 
+print(fighter.Name ++ " is ambushed by a bandit. A fight commences!\n" );
 fight(fighter, bandit);
